@@ -1,4 +1,3 @@
-##
 """ Lexer for Lua interpreter
 
 """
@@ -19,20 +18,20 @@ tokens = [
 
 literals = ["(", ")", '=']
 
-# tokens += reserved.values()
+tokens += keywords.values()
 
 t_ignore = " \t"
 
 
 # Tokens = (tok.type, tok.value, tok.lineno, tok.lexpos)
 def t_NUMBER(t):
-    r'([0-9]+[.][0-9]+)|([0-9]+)'
-    try:
+    r'([0-9]*[.][0-9]+)|([0-9]+)'
+    if "." in t.value:
+        t.value = float(t.value)
+        return t
+    else:
         t.value = int(t.value)
-    except ValueError:
-        print("Integer value too large %s" % t.value)
-        t.value = 0
-    return t
+        return t
 
 
 def t_IDENTIFIER(t):
@@ -54,7 +53,7 @@ t_DIVIDE = r'\/'
 
 
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    print(f"Illegal character {t.value[0]}")
     t.lexer.skip(1)
 
 
@@ -63,8 +62,8 @@ lexer = lex.lex()
 if __name__ == "__main__":
     # Test it out
     data = '''
-    3 + 4 * 10
-      + -20 *2
+    3 + 4.4 * .10
+      + (20 * 2)
     '''
 
     # Give the lexer some input

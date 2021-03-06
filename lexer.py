@@ -34,10 +34,10 @@ def t_NUMBER(t):
         return t
 
 
-def t_IDENTIFIER(t):
-    r'[a-zA-Z_][a-zA-Z0-9]*'
-    t.type = keywords.get(t.value, 'IDENTIFIER')    # Check for reserved words
-    return t
+# def t_IDENTIFIER(t):
+#     r'[a-zA-Z_][a-zA-Z0-9]*'
+#     t.type = keywords.get(t.value, 'IDENTIFIER')    # Check for reserved words
+#     return t
 
 
 # Define a rule so we can track line numbers
@@ -57,7 +57,7 @@ def t_error(t):
     t.lexer.skip(1)
 
 
-lexer = lex.lex()
+lexer = lex.lex(debug=False)
 
 if __name__ == "__main__":
     # Test it out

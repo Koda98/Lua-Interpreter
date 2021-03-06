@@ -1,0 +1,281 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> exp
+Rule 1     exp -> exp PLUS exp
+Rule 2     exp -> exp MINUS exp
+Rule 3     exp -> exp TIMES exp
+Rule 4     exp -> exp DIVIDE exp
+Rule 5     exp -> ( exp )
+Rule 6     exp -> IDENTIFIER
+Rule 7     exp -> NUMBER
+
+Terminals, with rules where they appear
+
+(                    : 5
+)                    : 5
+DIVIDE               : 4
+IDENTIFIER           : 6
+MINUS                : 2
+NUMBER               : 7
+PLUS                 : 1
+TIMES                : 3
+error                : 
+
+Nonterminals, with rules where they appear
+
+exp                  : 1 1 2 2 3 3 4 4 5 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . exp
+    (1) exp -> . exp PLUS exp
+    (2) exp -> . exp MINUS exp
+    (3) exp -> . exp TIMES exp
+    (4) exp -> . exp DIVIDE exp
+    (5) exp -> . ( exp )
+    (6) exp -> . IDENTIFIER
+    (7) exp -> . NUMBER
+
+    (               shift and go to state 2
+    IDENTIFIER      shift and go to state 3
+    NUMBER          shift and go to state 4
+
+    exp                            shift and go to state 1
+
+state 1
+
+    (0) S' -> exp .
+    (1) exp -> exp . PLUS exp
+    (2) exp -> exp . MINUS exp
+    (3) exp -> exp . TIMES exp
+    (4) exp -> exp . DIVIDE exp
+
+    PLUS            shift and go to state 5
+    MINUS           shift and go to state 6
+    TIMES           shift and go to state 7
+    DIVIDE          shift and go to state 8
+
+
+state 2
+
+    (5) exp -> ( . exp )
+    (1) exp -> . exp PLUS exp
+    (2) exp -> . exp MINUS exp
+    (3) exp -> . exp TIMES exp
+    (4) exp -> . exp DIVIDE exp
+    (5) exp -> . ( exp )
+    (6) exp -> . IDENTIFIER
+    (7) exp -> . NUMBER
+
+    (               shift and go to state 2
+    IDENTIFIER      shift and go to state 3
+    NUMBER          shift and go to state 4
+
+    exp                            shift and go to state 9
+
+state 3
+
+    (6) exp -> IDENTIFIER .
+
+    PLUS            reduce using rule 6 (exp -> IDENTIFIER .)
+    MINUS           reduce using rule 6 (exp -> IDENTIFIER .)
+    TIMES           reduce using rule 6 (exp -> IDENTIFIER .)
+    DIVIDE          reduce using rule 6 (exp -> IDENTIFIER .)
+    $end            reduce using rule 6 (exp -> IDENTIFIER .)
+    )               reduce using rule 6 (exp -> IDENTIFIER .)
+
+
+state 4
+
+    (7) exp -> NUMBER .
+
+    PLUS            reduce using rule 7 (exp -> NUMBER .)
+    MINUS           reduce using rule 7 (exp -> NUMBER .)
+    TIMES           reduce using rule 7 (exp -> NUMBER .)
+    DIVIDE          reduce using rule 7 (exp -> NUMBER .)
+    $end            reduce using rule 7 (exp -> NUMBER .)
+    )               reduce using rule 7 (exp -> NUMBER .)
+
+
+state 5
+
+    (1) exp -> exp PLUS . exp
+    (1) exp -> . exp PLUS exp
+    (2) exp -> . exp MINUS exp
+    (3) exp -> . exp TIMES exp
+    (4) exp -> . exp DIVIDE exp
+    (5) exp -> . ( exp )
+    (6) exp -> . IDENTIFIER
+    (7) exp -> . NUMBER
+
+    (               shift and go to state 2
+    IDENTIFIER      shift and go to state 3
+    NUMBER          shift and go to state 4
+
+    exp                            shift and go to state 10
+
+state 6
+
+    (2) exp -> exp MINUS . exp
+    (1) exp -> . exp PLUS exp
+    (2) exp -> . exp MINUS exp
+    (3) exp -> . exp TIMES exp
+    (4) exp -> . exp DIVIDE exp
+    (5) exp -> . ( exp )
+    (6) exp -> . IDENTIFIER
+    (7) exp -> . NUMBER
+
+    (               shift and go to state 2
+    IDENTIFIER      shift and go to state 3
+    NUMBER          shift and go to state 4
+
+    exp                            shift and go to state 11
+
+state 7
+
+    (3) exp -> exp TIMES . exp
+    (1) exp -> . exp PLUS exp
+    (2) exp -> . exp MINUS exp
+    (3) exp -> . exp TIMES exp
+    (4) exp -> . exp DIVIDE exp
+    (5) exp -> . ( exp )
+    (6) exp -> . IDENTIFIER
+    (7) exp -> . NUMBER
+
+    (               shift and go to state 2
+    IDENTIFIER      shift and go to state 3
+    NUMBER          shift and go to state 4
+
+    exp                            shift and go to state 12
+
+state 8
+
+    (4) exp -> exp DIVIDE . exp
+    (1) exp -> . exp PLUS exp
+    (2) exp -> . exp MINUS exp
+    (3) exp -> . exp TIMES exp
+    (4) exp -> . exp DIVIDE exp
+    (5) exp -> . ( exp )
+    (6) exp -> . IDENTIFIER
+    (7) exp -> . NUMBER
+
+    (               shift and go to state 2
+    IDENTIFIER      shift and go to state 3
+    NUMBER          shift and go to state 4
+
+    exp                            shift and go to state 13
+
+state 9
+
+    (5) exp -> ( exp . )
+    (1) exp -> exp . PLUS exp
+    (2) exp -> exp . MINUS exp
+    (3) exp -> exp . TIMES exp
+    (4) exp -> exp . DIVIDE exp
+
+    )               shift and go to state 14
+    PLUS            shift and go to state 5
+    MINUS           shift and go to state 6
+    TIMES           shift and go to state 7
+    DIVIDE          shift and go to state 8
+
+
+state 10
+
+    (1) exp -> exp PLUS exp .
+    (1) exp -> exp . PLUS exp
+    (2) exp -> exp . MINUS exp
+    (3) exp -> exp . TIMES exp
+    (4) exp -> exp . DIVIDE exp
+
+    PLUS            reduce using rule 1 (exp -> exp PLUS exp .)
+    MINUS           reduce using rule 1 (exp -> exp PLUS exp .)
+    $end            reduce using rule 1 (exp -> exp PLUS exp .)
+    )               reduce using rule 1 (exp -> exp PLUS exp .)
+    TIMES           shift and go to state 7
+    DIVIDE          shift and go to state 8
+
+  ! TIMES           [ reduce using rule 1 (exp -> exp PLUS exp .) ]
+  ! DIVIDE          [ reduce using rule 1 (exp -> exp PLUS exp .) ]
+  ! PLUS            [ shift and go to state 5 ]
+  ! MINUS           [ shift and go to state 6 ]
+
+
+state 11
+
+    (2) exp -> exp MINUS exp .
+    (1) exp -> exp . PLUS exp
+    (2) exp -> exp . MINUS exp
+    (3) exp -> exp . TIMES exp
+    (4) exp -> exp . DIVIDE exp
+
+    PLUS            reduce using rule 2 (exp -> exp MINUS exp .)
+    MINUS           reduce using rule 2 (exp -> exp MINUS exp .)
+    $end            reduce using rule 2 (exp -> exp MINUS exp .)
+    )               reduce using rule 2 (exp -> exp MINUS exp .)
+    TIMES           shift and go to state 7
+    DIVIDE          shift and go to state 8
+
+  ! TIMES           [ reduce using rule 2 (exp -> exp MINUS exp .) ]
+  ! DIVIDE          [ reduce using rule 2 (exp -> exp MINUS exp .) ]
+  ! PLUS            [ shift and go to state 5 ]
+  ! MINUS           [ shift and go to state 6 ]
+
+
+state 12
+
+    (3) exp -> exp TIMES exp .
+    (1) exp -> exp . PLUS exp
+    (2) exp -> exp . MINUS exp
+    (3) exp -> exp . TIMES exp
+    (4) exp -> exp . DIVIDE exp
+
+    PLUS            reduce using rule 3 (exp -> exp TIMES exp .)
+    MINUS           reduce using rule 3 (exp -> exp TIMES exp .)
+    TIMES           reduce using rule 3 (exp -> exp TIMES exp .)
+    DIVIDE          reduce using rule 3 (exp -> exp TIMES exp .)
+    $end            reduce using rule 3 (exp -> exp TIMES exp .)
+    )               reduce using rule 3 (exp -> exp TIMES exp .)
+
+  ! PLUS            [ shift and go to state 5 ]
+  ! MINUS           [ shift and go to state 6 ]
+  ! TIMES           [ shift and go to state 7 ]
+  ! DIVIDE          [ shift and go to state 8 ]
+
+
+state 13
+
+    (4) exp -> exp DIVIDE exp .
+    (1) exp -> exp . PLUS exp
+    (2) exp -> exp . MINUS exp
+    (3) exp -> exp . TIMES exp
+    (4) exp -> exp . DIVIDE exp
+
+    PLUS            reduce using rule 4 (exp -> exp DIVIDE exp .)
+    MINUS           reduce using rule 4 (exp -> exp DIVIDE exp .)
+    TIMES           reduce using rule 4 (exp -> exp DIVIDE exp .)
+    DIVIDE          reduce using rule 4 (exp -> exp DIVIDE exp .)
+    $end            reduce using rule 4 (exp -> exp DIVIDE exp .)
+    )               reduce using rule 4 (exp -> exp DIVIDE exp .)
+
+  ! PLUS            [ shift and go to state 5 ]
+  ! MINUS           [ shift and go to state 6 ]
+  ! TIMES           [ shift and go to state 7 ]
+  ! DIVIDE          [ shift and go to state 8 ]
+
+
+state 14
+
+    (5) exp -> ( exp ) .
+
+    PLUS            reduce using rule 5 (exp -> ( exp ) .)
+    MINUS           reduce using rule 5 (exp -> ( exp ) .)
+    TIMES           reduce using rule 5 (exp -> ( exp ) .)
+    DIVIDE          reduce using rule 5 (exp -> ( exp ) .)
+    $end            reduce using rule 5 (exp -> ( exp ) .)
+    )               reduce using rule 5 (exp -> ( exp ) .)
+

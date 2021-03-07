@@ -27,9 +27,9 @@ def p_exp_group(p):
 #     """stat : IDENTIFIER '=' exp"""
 #     p[0] = Variable(p[1], p[3])
 
-def p_exp_var(p):
-    """exp : IDENTIFIER"""
-    p[0] = Variable(p[1])
+# def p_exp_var(p):
+#     """exp : IDENTIFIER"""
+#     p[0] = Variable(p[1])
 
 
 def p_exp_numeral(p):
@@ -45,7 +45,16 @@ def p_error(p):
         print("Syntax error at EOF")
 
 
-parser = yacc.yacc(debug=True)
+parser = yacc.yacc()
+
+
+def parse(data, debug=0):
+    parser.error = 0
+    p = parser.parse(data, debug=debug)
+    if parser.error:
+        return None
+    return p
+
 
 if __name__ == "__main__":
     # Test it out

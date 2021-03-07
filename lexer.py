@@ -8,7 +8,7 @@ keywords = {}
 
 
 tokens = [
-    'IDENTIFIER',
+    # 'IDENTIFIER',
     'NUMBER',
     'PLUS',
     'MINUS',

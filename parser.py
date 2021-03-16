@@ -8,7 +8,8 @@ tokens = lexer.tokens
 
 precedence = (
     ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE')
+    ('left', 'TIMES', 'DIVIDE'),
+    ('right', 'UMINUS')
 )
 
 def p_exp_binop(p):
@@ -35,6 +36,11 @@ def p_exp_group(p):
 def p_exp_numeral(p):
     """exp : NUMBER"""
     p[0] = Numeral(p[1])
+
+
+def p_exp_unop(p):
+    """exp : MINUS exp %prec UMINUS"""
+    p[0] = UnopExp(p[1], p[2])
 
 
 def p_error(p):

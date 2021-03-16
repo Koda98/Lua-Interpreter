@@ -28,8 +28,15 @@ class Interpreter(NodeVisitor):
         elif node.op == "/":
             return self.visit(node.left) / self.visit(node.right)
 
+    def visit_UnopExp(self, node):
+        if node.op == "-":
+            return -1 * self.visit(node.exp)
+
     def visit_Numeral(self, node):
-        return node.value
+        if node.negative:
+            return -1 * node.value
+        else:
+            return node.value
 
     def visit_GroupExp(self, node):
         return self.visit(node.exp)
@@ -42,9 +49,10 @@ def main():
     # while True:
     # s = input()
 
-    s = "12 / 6 - (3 + 5)"
+    s = "4 - - - - 3"
 
     ast = parser.parse(s, debug=False)
+    print("AST:", ast)
     interpreter = Interpreter(ast)
     result = interpreter.run()
     print(result)

@@ -42,8 +42,9 @@ def t_NUMBER(t):
 
 # Define a rule so we can track line numbers
 def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
+    r'\n'
+    pass
+    # t.lexer.lineno += len(t.value)
 
 
 t_PLUS = r'\+'
@@ -62,7 +63,7 @@ lexer = lex.lex(debug=False)
 if __name__ == "__main__":
     # Test it out
     data = '''
-    3 + 4.4 * .10
+    (4 - 6) * (3 * 2) / 2
       + (20 * 2)
     '''
 
@@ -75,5 +76,3 @@ if __name__ == "__main__":
         if not tok:
             break  # No more input
         print(tok)
-
-

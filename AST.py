@@ -15,6 +15,15 @@ class BinopExp(AST):
         return f"Binop({self.left}, {self.op}, {self.right})"
 
 
+class UnopExp(AST):
+    def __init__(self, op, exp):
+        self.op = op
+        self.exp = exp
+
+    def __str__(self):
+        return f"Unop({self.op}, {self.exp})"
+
+
 class GroupExp(AST):
     def __init__(self, exp):
         self.exp = exp
@@ -24,11 +33,19 @@ class GroupExp(AST):
 
 
 class Numeral(AST):
-    def __init__(self, value):
+    def __init__(self, value, negative=False):
         self.value = value
+        self.negative = negative
+        # if negative:
+        #     self.value = value
+        # else:
+        #     self.value = value
 
     def __str__(self):
-        return f"Numeral({self.value})"
+        if self.negative:
+            return f"Numeral(-{self.value}"
+        else:
+            return f"Numeral({self.value})"
 
 
 class Variable(AST):

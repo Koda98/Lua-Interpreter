@@ -1,0 +1,9 @@
+Current grammar
+
+exp ::=  exp PLUS exp
+       | exp MINUS exp
+       | exp TIMES exp
+       | exp DIVIDE exp
+       | '(' exp ')'
+       | NUMBER
+

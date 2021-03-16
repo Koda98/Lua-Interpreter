@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "leftPLUSMINUSleftTIMESDIVIDEDIVIDE MINUS NUMBER PLUS TIMESexp : exp PLUS exp\n           | exp MINUS exp\n           | exp TIMES exp\n           | exp DIVIDE expexp : '(' exp ')'exp : NUMBER"
+_lr_signature = "leftPLUSMINUSleftTIMESDIVIDErightUMINUSDIVIDE MINUS NUMBER PLUS TIMESexp : exp PLUS exp\n           | exp MINUS exp\n           | exp TIMES exp\n           | exp DIVIDE expexp : '(' exp ')'exp : NUMBERexp : MINUS exp %prec UMINUS"
     
-_lr_action_items = {'(':([0,2,4,5,6,7,],[2,2,2,2,2,2,]),'NUMBER':([0,2,4,5,6,7,],[3,3,3,3,3,3,]),'$end':([1,3,9,10,11,12,13,],[0,-6,-1,-2,-3,-4,-5,]),'PLUS':([1,3,8,9,10,11,12,13,],[4,-6,4,-1,-2,-3,-4,-5,]),'MINUS':([1,3,8,9,10,11,12,13,],[5,-6,5,-1,-2,-3,-4,-5,]),'TIMES':([1,3,8,9,10,11,12,13,],[6,-6,6,6,6,-3,-4,-5,]),'DIVIDE':([1,3,8,9,10,11,12,13,],[7,-6,7,7,7,-3,-4,-5,]),')':([3,8,9,10,11,12,13,],[-6,13,-1,-2,-3,-4,-5,]),}
+_lr_action_items = {'(':([0,2,3,5,6,7,8,],[3,3,3,3,3,3,3,]),'NUMBER':([0,2,3,5,6,7,8,],[4,4,4,4,4,4,4,]),'MINUS':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,],[2,6,2,2,-6,2,2,2,2,-7,6,-1,-2,-3,-4,-5,]),'$end':([1,4,9,11,12,13,14,15,],[0,-6,-7,-1,-2,-3,-4,-5,]),'PLUS':([1,4,9,10,11,12,13,14,15,],[5,-6,-7,5,-1,-2,-3,-4,-5,]),'TIMES':([1,4,9,10,11,12,13,14,15,],[7,-6,-7,7,7,7,-3,-4,-5,]),'DIVIDE':([1,4,9,10,11,12,13,14,15,],[8,-6,-7,8,8,8,-3,-4,-5,]),')':([4,9,10,11,12,13,14,15,],[-6,-7,15,-1,-2,-3,-4,-5,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'exp':([0,2,4,5,6,7,],[1,8,9,10,11,12,]),}
+_lr_goto_items = {'exp':([0,2,3,5,6,7,8,],[1,9,10,11,12,13,14,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,10 +27,11 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> exp","S'",1,None,None,None),
-  ('exp -> exp PLUS exp','exp',3,'p_exp_binop','parser.py',15),
-  ('exp -> exp MINUS exp','exp',3,'p_exp_binop','parser.py',16),
-  ('exp -> exp TIMES exp','exp',3,'p_exp_binop','parser.py',17),
-  ('exp -> exp DIVIDE exp','exp',3,'p_exp_binop','parser.py',18),
-  ('exp -> ( exp )','exp',3,'p_exp_group','parser.py',23),
-  ('exp -> NUMBER','exp',1,'p_exp_numeral','parser.py',36),
+  ('exp -> exp PLUS exp','exp',3,'p_exp_binop','parser.py',16),
+  ('exp -> exp MINUS exp','exp',3,'p_exp_binop','parser.py',17),
+  ('exp -> exp TIMES exp','exp',3,'p_exp_binop','parser.py',18),
+  ('exp -> exp DIVIDE exp','exp',3,'p_exp_binop','parser.py',19),
+  ('exp -> ( exp )','exp',3,'p_exp_group','parser.py',24),
+  ('exp -> NUMBER','exp',1,'p_exp_numeral','parser.py',37),
+  ('exp -> MINUS exp','exp',2,'p_exp_unop','parser.py',42),
 ]

@@ -7,11 +7,18 @@ block ::= stat_list
 stat_list ::= stat stat_list
             | empty
 
-stat ::= var '=' exp
+stat ::= ';'
+       | varlist '=' explist
        | RETURN
        | RETURN exp
        | RETURN ';'
        | RETURN exp ';'
+
+varlist ::= var
+          | var ',' varlist
+
+explist ::= exp
+          | exp ',' explist
 
 exp ::= exp PLUS exp
       | exp MINUS exp
@@ -23,3 +30,5 @@ exp ::= exp PLUS exp
       | NUMBER
 
 var ::= IDENTIFIER
+
+empty ::=

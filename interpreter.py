@@ -18,6 +18,26 @@ class Interpreter(NodeVisitor):
         self.state = {}
         self.ast = ast
 
+    def visit_Chunk(self, node):
+        self.visit(node.block)
+
+    def visit_Block(self, node):
+        self.visit(node.stat_list)
+
+    def visit_StatList(self, node):
+        self.visit(node.stat)
+        if node.stat_list:
+            self.visit(node.stat_list)
+
+    def visit_AssignStat(self, node):
+        var = node.var
+        name = var.name
+        value = self.visit(node.exp)
+        self.state[name] = value
+
+    def visit_RetStat(self, node):
+        return self.visit(node.exp)
+
     def visit_BinopExp(self, node):
         if node.op == "+":
             return self.visit(node.left) + self.visit(node.right)
@@ -32,31 +52,49 @@ class Interpreter(NodeVisitor):
         if node.op == "-":
             return -1 * self.visit(node.exp)
 
+    def visit_GroupExp(self, node):
+        return self.visit(node.exp)
+
     def visit_Numeral(self, node):
         if node.negative:
             return -1 * node.value
         else:
             return node.value
 
-    def visit_GroupExp(self, node):
-        return self.visit(node.exp)
+    def visit_Variable(self, node):
+        name = node.name.name
+        value = self.state.get(name)
+        if value:
+            return value
+        else:
+            return "nil"
+
+    def visit_Empty(self, node):
+        return node.value
 
     def run(self):
         return self.visit(self.ast)
 
 
-def main():
+def main(inter_debug=False, parse_debug=False):
     # while True:
     # s = input()
 
-    s = "4 - - - - 3"
+    s = """
+    a = 9
+    b = 3
+    c = a * b
+    """
 
-    ast = parser.parse(s, debug=False)
-    print("AST:", ast)
+    ast = parser.parse(s, debug=parse_debug)
+    if inter_debug:
+        print("AST:", ast)
     interpreter = Interpreter(ast)
     result = interpreter.run()
-    print(result)
+    if inter_debug:
+        print("State:", interpreter.state)
+    # print(result)
 
 
 if __name__ == "__main__":
-    main()
+    main(inter_debug=True, parse_debug=False)

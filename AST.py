@@ -14,15 +14,15 @@ class Chunk(AST):
 
 
 class Block(AST):
-    def __init__(self, stat, retstat=None):
-        self.stat = stat
+    def __init__(self, stat_list, retstat=None):
+        self.stat_list = stat_list
         self.retstat = retstat
 
     def __str__(self):
         if self.retstat:
-            return f"Block({self.stat} {self.retstat})"
+            return f"Block({self.stat_list} {self.retstat})"
         else:
-            return f"Block({self.stat})"
+            return f"Block({self.stat_list})"
 
 
 class StatList(AST):
@@ -85,10 +85,6 @@ class Numeral(AST):
     def __init__(self, value, negative=False):
         self.value = value
         self.negative = negative
-        # if negative:
-        #     self.value = value
-        # else:
-        #     self.value = value
 
     def __str__(self):
         if self.negative:
@@ -98,12 +94,11 @@ class Numeral(AST):
 
 
 class Variable(AST):
-    def __init__(self, name, value="Nil"):
+    def __init__(self, name):
         self.name = name
-        self.value = value
 
     def __str__(self):
-        return f"Identifier({self.name}, {self.value})"
+        return f"Variable({self.name})"
 
 
 class Empty(AST):

@@ -20,10 +20,11 @@ def p_chunk(p):
 
 def p_block(p):
     """block : stat_list"""
-    if len(p) == 3:
-        p[0] = Block(p[1], p[2])
-    else:
-        p[0] = Block(p[1])
+    p[0] = Block(p[1])
+    # if len(p) == 3:
+    #     p[0] = Block(p[1], p[2])
+    # else:
+    #     p[0] = Block(p[1])
 
 
 def p_stat_list(p):
@@ -114,6 +115,7 @@ if __name__ == "__main__":
     # Test it out
     data = '''
     a = 9 + 1
+    b = (8 * 3) / (3 - 2)
     return a
     '''
 

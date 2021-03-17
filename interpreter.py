@@ -30,13 +30,28 @@ class Interpreter(NodeVisitor):
             self.visit(node.stat_list)
 
     def visit_AssignStat(self, node):
-        var = node.var
-        name = var.name
-        value = self.visit(node.exp)
-        self.state[name] = value
+        varlist = self.visit(node.varlist)
+        explist = self.visit(node.explist)
+        for var, exp in zip(varlist, explist):
+            name = var.name
+            exp = self.visit(exp)
+            self.state[name] = exp
 
     def visit_RetStat(self, node):
         return self.visit(node.exp)
+
+    def visit_Varlist(self, node):
+        varlist = [node.var]
+        if node.other:
+            varlist += self.visit(node.other)
+        return varlist
+
+    def visit_Explist(self, node):
+        # self.visit(node.exp)
+        explist = [node.exp]
+        if node.other:
+            explist += self.visit(node.other)
+        return explist
 
     def visit_BinopExp(self, node):
         if node.op == "+":
@@ -44,6 +59,8 @@ class Interpreter(NodeVisitor):
         elif node.op == "-":
             return self.visit(node.left) - self.visit(node.right)
         elif node.op == "*":
+            print("left node:", node.left)
+            print("right node:", node.right)
             return self.visit(node.left) * self.visit(node.right)
         elif node.op == "/":
             return self.visit(node.left) / self.visit(node.right)
@@ -55,6 +72,9 @@ class Interpreter(NodeVisitor):
     def visit_GroupExp(self, node):
         return self.visit(node.exp)
 
+    def visit_VarExp(self, node):
+        return self.visit(node.var)
+
     def visit_Numeral(self, node):
         if node.negative:
             return -1 * node.value
@@ -62,7 +82,7 @@ class Interpreter(NodeVisitor):
             return node.value
 
     def visit_Variable(self, node):
-        name = node.name.name
+        name = node.name
         value = self.state.get(name)
         if value:
             return value
@@ -81,9 +101,7 @@ def main(inter_debug=False, parse_debug=False):
     # s = input()
 
     s = """
-    a = 9 + 1 ;
-    b = (8 * 3) / (4 - 2);
-    c = a * b
+    a, b, c = 1+1, 2+2, 3+3
     """
 
     ast = parser.parse(s, debug=parse_debug)

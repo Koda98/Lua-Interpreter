@@ -18,7 +18,7 @@ tokens = [
     'DIVIDE',
 ]
 
-literals = ["(", ")", '=', ';']
+literals = ["(", ")", '=', ';', ',']
 
 tokens += keywords.values()
 
@@ -65,8 +65,7 @@ lexer = lex.lex(debug=False)
 if __name__ == "__main__":
     # Test it out
     data = '''
-    a = 1 + 3
-    return a;
+    a, b, c = 1, 2, 3
     '''
 
     # Give the lexer some input

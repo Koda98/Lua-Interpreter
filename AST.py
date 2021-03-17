@@ -38,12 +38,12 @@ class StatList(AST):
 
 
 class AssignStat(AST):
-    def __init__(self, var, exp):
-        self.var = var
-        self.exp = exp
+    def __init__(self, varlist, explist):
+        self.varlist = varlist
+        self.explist = explist
 
     def __str__(self):
-        return f"AssignStat({self.var} = {self.exp})"
+        return f"AssignStat({self.varlist} = {self.explist})"
 
 
 class RetStat(AST):
@@ -52,6 +52,30 @@ class RetStat(AST):
 
     def __str__(self):
         return f"RetStat({self.exp})"
+
+
+class Varlist(AST):
+    def __init__(self, var, other=None):
+        self.var = var
+        self.other = other
+
+    def __str__(self):
+        if self.other:
+            return f"Varlist({self.var}, {self.other})"
+        else:
+            return f"Varlist({self.var})"
+
+
+class Explist(AST):
+    def __init__(self, exp, other=None):
+        self.exp = exp
+        self.other = other
+
+    def __str__(self):
+        if self.other:
+            return f"Explist({self.exp}, {self.other})"
+        else:
+            return f"Explist({self.exp})"
 
 
 class BinopExp(AST):
@@ -79,6 +103,14 @@ class GroupExp(AST):
 
     def __str__(self):
         return f"GroupExp({self.exp})"
+
+
+class VarExp(AST):
+    def __init__(self, var):
+        self.var = var
+
+    def __str__(self):
+        return f"VarExp({self.var})"
 
 
 class Numeral(AST):

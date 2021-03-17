@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = "leftPLUSMINUSleftTIMESDIVIDErightUMINUSDIVIDE IDENTIFIER INTEGER_DIVIDE MINUS NUMBER PLUS RETURN TIMESchunk : blockblock : stat_liststat_list : stat stat_list\n                 | emptystat : ';'stat : varlist '=' expliststat : RETURN\n            | RETURN exp\n            | RETURN ';'\n            | RETURN exp ';'varlist : var\n               | var ',' varlistvar : IDENTIFIERexplist : exp\n               | exp ',' explistexp : exp PLUS exp\n           | exp MINUS exp\n           | exp TIMES exp\n           | exp DIVIDE exp\n           | exp INTEGER_DIVIDE expexp : '(' exp ')'exp : varexp : NUMBERexp : MINUS exp %prec UMINUSempty :"
+_lr_signature = "leftPLUSMINUSleftTIMESDIVIDEINTEGER_DIVIDErightUMINUSDIVIDE DO END IDENTIFIER INTEGER_DIVIDE MINUS NUMBER PLUS RETURN TIMESchunk : blockblock : stat_liststat_list : stat stat_list\n                 | emptystat : ';'stat : DO block ENDstat : varlist '=' expliststat : RETURN\n            | RETURN explist\n            | RETURN ';'\n            | RETURN explist ';'varlist : var\n               | var ',' varlistvar : IDENTIFIERexplist : exp\n               | exp ',' explistexp : exp PLUS exp\n           | exp MINUS exp\n           | exp TIMES exp\n           | exp DIVIDE exp\n           | exp INTEGER_DIVIDE expexp : '(' exp ')'exp : varexp : NUMBERexp : MINUS exp %prec UMINUSempty :"
     
-_lr_action_items = {';':([0,4,6,8,10,13,14,17,18,20,21,22,28,32,33,34,35,36,37,38,],[6,6,-5,14,-13,22,-9,-22,-23,-6,-14,-10,-24,-16,-17,-18,-19,-20,-21,-15,]),'RETURN':([0,4,6,8,10,13,14,17,18,20,21,22,28,32,33,34,35,36,37,38,],[8,8,-5,-7,-13,-8,-9,-22,-23,-6,-14,-10,-24,-16,-17,-18,-19,-20,-21,-15,]),'$end':([0,1,2,3,4,5,6,8,10,11,13,14,17,18,20,21,22,28,32,33,34,35,36,37,38,],[-25,0,-1,-2,-25,-4,-5,-7,-13,-3,-8,-9,-22,-23,-6,-14,-10,-24,-16,-17,-18,-19,-20,-21,-15,]),'IDENTIFIER':([0,4,6,8,10,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,31,32,33,34,35,36,37,38,],[10,10,-5,10,-13,10,-8,-9,10,10,-22,-23,10,-6,-14,-10,10,10,10,10,10,-24,10,-16,-17,-18,-19,-20,-21,-15,]),'=':([7,9,10,30,],[12,-11,-13,-12,]),'(':([8,12,15,16,23,24,25,26,27,31,],[16,16,16,16,16,16,16,16,16,16,]),'NUMBER':([8,12,15,16,23,24,25,26,27,31,],[18,18,18,18,18,18,18,18,18,18,]),'MINUS':([8,10,12,13,15,16,17,18,21,23,24,25,26,27,28,29,31,32,33,34,35,36,37,],[15,-13,15,24,15,15,-22,-23,24,15,15,15,15,15,-24,24,15,-16,-17,-18,-19,24,-21,]),',':([9,10,17,18,21,28,32,33,34,35,36,37,],[19,-13,-22,-23,31,-24,-16,-17,-18,-19,-20,-21,]),'PLUS':([10,13,17,18,21,28,29,32,33,34,35,36,37,],[-13,23,-22,-23,23,-24,23,-16,-17,-18,-19,23,-21,]),'TIMES':([10,13,17,18,21,28,29,32,33,34,35,36,37,],[-13,25,-22,-23,25,-24,25,25,25,-18,-19,25,-21,]),'DIVIDE':([10,13,17,18,21,28,29,32,33,34,35,36,37,],[-13,26,-22,-23,26,-24,26,26,26,-18,-19,26,-21,]),'INTEGER_DIVIDE':([10,13,17,18,21,28,29,32,33,34,35,36,37,],[-13,27,-22,-23,27,-24,27,-16,-17,-18,-19,27,-21,]),')':([10,17,18,28,29,32,33,34,35,36,37,],[-13,-22,-23,-24,37,-16,-17,-18,-19,-20,-21,]),}
+_lr_action_items = {';':([0,4,6,7,9,11,15,16,17,20,21,23,24,25,32,35,36,37,38,39,40,41,],[6,6,-5,6,16,-14,25,-10,-15,-23,-24,-6,-7,-11,-25,-16,-17,-18,-19,-20,-21,-22,]),'DO':([0,4,6,7,9,11,15,16,17,20,21,23,24,25,32,35,36,37,38,39,40,41,],[7,7,-5,7,-8,-14,-9,-10,-15,-23,-24,-6,-7,-11,-25,-16,-17,-18,-19,-20,-21,-22,]),'RETURN':([0,4,6,7,9,11,15,16,17,20,21,23,24,25,32,35,36,37,38,39,40,41,],[9,9,-5,9,-8,-14,-9,-10,-15,-23,-24,-6,-7,-11,-25,-16,-17,-18,-19,-20,-21,-22,]),'$end':([0,1,2,3,4,5,6,9,11,12,15,16,17,20,21,23,24,25,32,35,36,37,38,39,40,41,],[-26,0,-1,-2,-26,-4,-5,-8,-14,-3,-9,-10,-15,-23,-24,-6,-7,-11,-25,-16,-17,-18,-19,-20,-21,-22,]),'IDENTIFIER':([0,4,6,7,9,11,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,35,36,37,38,39,40,41,],[11,11,-5,11,11,-14,11,-9,-10,-15,11,11,-23,-24,11,-6,-7,-11,11,11,11,11,11,11,-25,-16,-17,-18,-19,-20,-21,-22,]),'END':([3,4,5,6,7,9,11,12,13,15,16,17,20,21,23,24,25,32,35,36,37,38,39,40,41,],[-2,-26,-4,-5,-26,-8,-14,-3,23,-9,-10,-15,-23,-24,-6,-7,-11,-25,-16,-17,-18,-19,-20,-21,-22,]),'=':([8,10,11,34,],[14,-12,-14,-13,]),'(':([9,14,18,19,26,27,28,29,30,31,],[19,19,19,19,19,19,19,19,19,19,]),'NUMBER':([9,14,18,19,26,27,28,29,30,31,],[21,21,21,21,21,21,21,21,21,21,]),'MINUS':([9,11,14,17,18,19,20,21,26,27,28,29,30,31,32,33,36,37,38,39,40,41,],[18,-14,18,28,18,18,-23,-24,18,18,18,18,18,18,-25,28,-17,-18,-19,-20,-21,-22,]),',':([10,11,17,20,21,32,36,37,38,39,40,41,],[22,-14,26,-23,-24,-25,-17,-18,-19,-20,-21,-22,]),'PLUS':([11,17,20,21,32,33,36,37,38,39,40,41,],[-14,27,-23,-24,-25,27,-17,-18,-19,-20,-21,-22,]),'TIMES':([11,17,20,21,32,33,36,37,38,39,40,41,],[-14,29,-23,-24,-25,29,29,29,-19,-20,-21,-22,]),'DIVIDE':([11,17,20,21,32,33,36,37,38,39,40,41,],[-14,30,-23,-24,-25,30,30,30,-19,-20,-21,-22,]),'INTEGER_DIVIDE':([11,17,20,21,32,33,36,37,38,39,40,41,],[-14,31,-23,-24,-25,31,31,31,-19,-20,-21,-22,]),')':([11,20,21,32,33,36,37,38,39,40,41,],[-14,-23,-24,-25,41,-17,-18,-19,-20,-21,-22,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'chunk':([0,],[1,]),'block':([0,],[2,]),'stat_list':([0,4,],[3,11,]),'stat':([0,4,],[4,4,]),'empty':([0,4,],[5,5,]),'varlist':([0,4,19,],[7,7,30,]),'var':([0,4,8,12,15,16,19,23,24,25,26,27,31,],[9,9,17,17,17,17,9,17,17,17,17,17,17,]),'exp':([8,12,15,16,23,24,25,26,27,31,],[13,21,28,29,32,33,34,35,36,21,]),'explist':([12,31,],[20,38,]),}
+_lr_goto_items = {'chunk':([0,],[1,]),'block':([0,7,],[2,13,]),'stat_list':([0,4,7,],[3,12,3,]),'stat':([0,4,7,],[4,4,4,]),'empty':([0,4,7,],[5,5,5,]),'varlist':([0,4,7,22,],[8,8,8,34,]),'var':([0,4,7,9,14,18,19,22,26,27,28,29,30,31,],[10,10,10,20,20,20,20,10,20,20,20,20,20,20,]),'explist':([9,14,26,],[15,24,35,]),'exp':([9,14,18,19,26,27,28,29,30,31,],[17,17,32,33,17,36,37,38,39,40,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -32,24 +32,25 @@ _lr_productions = [
   ('stat_list -> stat stat_list','stat_list',2,'p_stat_list','parser.py',27),
   ('stat_list -> empty','stat_list',1,'p_stat_list','parser.py',28),
   ('stat -> ;','stat',1,'p_stat_semi','parser.py',36),
-  ('stat -> varlist = explist','stat',3,'p_stat_assign','parser.py',41),
-  ('stat -> RETURN','stat',1,'p_stat_return','parser.py',46),
-  ('stat -> RETURN exp','stat',2,'p_stat_return','parser.py',47),
-  ('stat -> RETURN ;','stat',2,'p_stat_return','parser.py',48),
-  ('stat -> RETURN exp ;','stat',3,'p_stat_return','parser.py',49),
-  ('varlist -> var','varlist',1,'p_varlist','parser.py',59),
-  ('varlist -> var , varlist','varlist',3,'p_varlist','parser.py',60),
-  ('var -> IDENTIFIER','var',1,'p_var','parser.py',68),
-  ('explist -> exp','explist',1,'p_explist','parser.py',73),
-  ('explist -> exp , explist','explist',3,'p_explist','parser.py',74),
-  ('exp -> exp PLUS exp','exp',3,'p_exp_binop','parser.py',82),
-  ('exp -> exp MINUS exp','exp',3,'p_exp_binop','parser.py',83),
-  ('exp -> exp TIMES exp','exp',3,'p_exp_binop','parser.py',84),
-  ('exp -> exp DIVIDE exp','exp',3,'p_exp_binop','parser.py',85),
-  ('exp -> exp INTEGER_DIVIDE exp','exp',3,'p_exp_binop','parser.py',86),
-  ('exp -> ( exp )','exp',3,'p_exp_group','parser.py',91),
-  ('exp -> var','exp',1,'p_exp_var','parser.py',96),
-  ('exp -> NUMBER','exp',1,'p_exp_numeral','parser.py',101),
-  ('exp -> MINUS exp','exp',2,'p_exp_unop','parser.py',106),
-  ('empty -> <empty>','empty',0,'p_empty','parser.py',111),
+  ('stat -> DO block END','stat',3,'p_stat_do','parser.py',41),
+  ('stat -> varlist = explist','stat',3,'p_stat_assign','parser.py',46),
+  ('stat -> RETURN','stat',1,'p_stat_return','parser.py',51),
+  ('stat -> RETURN explist','stat',2,'p_stat_return','parser.py',52),
+  ('stat -> RETURN ;','stat',2,'p_stat_return','parser.py',53),
+  ('stat -> RETURN explist ;','stat',3,'p_stat_return','parser.py',54),
+  ('varlist -> var','varlist',1,'p_varlist','parser.py',64),
+  ('varlist -> var , varlist','varlist',3,'p_varlist','parser.py',65),
+  ('var -> IDENTIFIER','var',1,'p_var','parser.py',73),
+  ('explist -> exp','explist',1,'p_explist','parser.py',78),
+  ('explist -> exp , explist','explist',3,'p_explist','parser.py',79),
+  ('exp -> exp PLUS exp','exp',3,'p_exp_binop','parser.py',87),
+  ('exp -> exp MINUS exp','exp',3,'p_exp_binop','parser.py',88),
+  ('exp -> exp TIMES exp','exp',3,'p_exp_binop','parser.py',89),
+  ('exp -> exp DIVIDE exp','exp',3,'p_exp_binop','parser.py',90),
+  ('exp -> exp INTEGER_DIVIDE exp','exp',3,'p_exp_binop','parser.py',91),
+  ('exp -> ( exp )','exp',3,'p_exp_group','parser.py',96),
+  ('exp -> var','exp',1,'p_exp_var','parser.py',101),
+  ('exp -> NUMBER','exp',1,'p_exp_numeral','parser.py',106),
+  ('exp -> MINUS exp','exp',2,'p_exp_unop','parser.py',111),
+  ('empty -> <empty>','empty',0,'p_empty','parser.py',116),
 ]

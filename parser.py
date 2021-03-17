@@ -8,7 +8,7 @@ tokens = lexer.tokens
 
 precedence = (
     ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE'),
+    ('left', 'TIMES', 'DIVIDE', 'INTEGER_DIVIDE'),
     ('right', 'UMINUS')
 )
 
@@ -37,6 +37,11 @@ def p_stat_semi(p):
     p[0] = Empty()
 
 
+def p_stat_do(p):
+    """stat : DO block END"""
+    p[0] = Block(p[2])
+
+
 def p_stat_assign(p):
     """stat : varlist '=' explist"""
     p[0] = AssignStat(p[1], p[3])
@@ -44,9 +49,9 @@ def p_stat_assign(p):
 
 def p_stat_return(p):
     """stat : RETURN
-            | RETURN exp
+            | RETURN explist
             | RETURN ';'
-            | RETURN exp ';'"""
+            | RETURN explist ';'"""
     if len(p) == 2:
         p[0] = RetStat()
     elif p[2] == ";":
@@ -134,7 +139,9 @@ def parse(data, debug=0):
 if __name__ == "__main__":
     # Test it out
     data = '''
+    do
     a = 1//3
+    end
     '''
 
     # Give the parser some input

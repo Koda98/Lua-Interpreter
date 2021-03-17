@@ -5,7 +5,9 @@
 import ply.lex as lex
 
 keywords = {
-    "return": "RETURN"
+    "return": "RETURN",
+    "do": "DO",
+    "end": "END",
 }
 
 
@@ -67,7 +69,9 @@ lexer = lex.lex(debug=False)
 if __name__ == "__main__":
     # Test it out
     data = '''
+    do
     a = 1 // 3
+    end
     '''
 
     # Give the lexer some input

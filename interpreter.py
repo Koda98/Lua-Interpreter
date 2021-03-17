@@ -103,7 +103,9 @@ def main(inter_debug=False, parse_debug=False):
     # s = input()
 
     s = """
+    do
     a = 14//3
+    end
     """
 
     ast = parser.parse(s, debug=parse_debug)

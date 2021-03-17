@@ -81,8 +81,8 @@ def main(inter_debug=False, parse_debug=False):
     # s = input()
 
     s = """
-    a = 9
-    b = 3
+    a = 9 + 1 ;
+    b = (8 * 3) / (4 - 2);
     c = a * b
     """
 

@@ -36,6 +36,11 @@ def p_stat_list(p):
         p[0] = Empty()
 
 
+def p_stat_semi(p):
+    """stat : ';'"""
+    p[0] = Empty()
+
+
 def p_stat_assign(p):
     """stat : var '=' exp"""
     p[0] = AssignStat(p[1], p[3])
@@ -72,11 +77,6 @@ def p_exp_var(p):
     p[0] = Variable(p[1])
 
 
-def p_var(p):
-    """var : IDENTIFIER"""
-    p[0] = Variable(p[1])
-
-
 def p_exp_numeral(p):
     """exp : NUMBER"""
     p[0] = Numeral(p[1])
@@ -85,6 +85,11 @@ def p_exp_numeral(p):
 def p_exp_unop(p):
     """exp : MINUS exp %prec UMINUS"""
     p[0] = UnopExp(p[1], p[2])
+
+
+def p_var(p):
+    """var : IDENTIFIER"""
+    p[0] = Variable(p[1])
 
 
 def p_empty(p):
@@ -114,14 +119,14 @@ def parse(data, debug=0):
 if __name__ == "__main__":
     # Test it out
     data = '''
-    a = 9 + 1
-    b = (8 * 3) / (3 - 2)
-    return a
+    a = 9 + 1 ;
+    b = (8 * 3) / (3 - 2);
+    
     '''
 
     # Give the parser some input
     parser.error = 0
-    p = parser.parse(data)
+    p = parser.parse(data, debug=True)
     if parser.error:
         print(None)
     print(p)

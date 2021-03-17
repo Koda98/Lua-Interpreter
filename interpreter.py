@@ -64,6 +64,8 @@ class Interpreter(NodeVisitor):
             return self.visit(node.left) * self.visit(node.right)
         elif node.op == "/":
             return self.visit(node.left) / self.visit(node.right)
+        elif node.op == "//":
+            return self.visit(node.left) // self.visit(node.right)
 
     def visit_UnopExp(self, node):
         if node.op == "-":
@@ -101,7 +103,7 @@ def main(inter_debug=False, parse_debug=False):
     # s = input()
 
     s = """
-    a, b, c = 1+1, 2+2, 3+3
+    a = 14//3
     """
 
     ast = parser.parse(s, debug=parse_debug)

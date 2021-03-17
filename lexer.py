@@ -16,6 +16,7 @@ tokens = [
     'MINUS',
     'TIMES',
     'DIVIDE',
+    'INTEGER_DIVIDE',
 ]
 
 literals = ["(", ")", '=', ';', ',']
@@ -53,6 +54,7 @@ t_PLUS = r'\+'
 t_MINUS = r'-'
 t_TIMES = r'\*'
 t_DIVIDE = r'\/'
+t_INTEGER_DIVIDE = r'\/\/'
 
 
 def t_error(t):
@@ -65,7 +67,7 @@ lexer = lex.lex(debug=False)
 if __name__ == "__main__":
     # Test it out
     data = '''
-    a, b, c = 1, 2, 3
+    a = 1 // 3
     '''
 
     # Give the lexer some input

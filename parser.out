@@ -22,23 +22,25 @@ Rule 16    exp -> exp PLUS exp
 Rule 17    exp -> exp MINUS exp
 Rule 18    exp -> exp TIMES exp
 Rule 19    exp -> exp DIVIDE exp
-Rule 20    exp -> ( exp )
-Rule 21    exp -> var
-Rule 22    exp -> NUMBER
-Rule 23    exp -> MINUS exp
-Rule 24    empty -> <empty>
+Rule 20    exp -> exp INTEGER_DIVIDE exp
+Rule 21    exp -> ( exp )
+Rule 22    exp -> var
+Rule 23    exp -> NUMBER
+Rule 24    exp -> MINUS exp
+Rule 25    empty -> <empty>
 
 Terminals, with rules where they appear
 
-(                    : 20
-)                    : 20
+(                    : 21
+)                    : 21
 ,                    : 12 15
 ;                    : 5 9 10
 =                    : 6
 DIVIDE               : 19
 IDENTIFIER           : 13
-MINUS                : 17 23
-NUMBER               : 22
+INTEGER_DIVIDE       : 20
+MINUS                : 17 24
+NUMBER               : 23
 PLUS                 : 16
 RETURN               : 7 8 9 10
 TIMES                : 18
@@ -49,11 +51,11 @@ Nonterminals, with rules where they appear
 block                : 1
 chunk                : 0
 empty                : 4
-exp                  : 8 10 14 15 16 16 17 17 18 18 19 19 20 23
+exp                  : 8 10 14 15 16 16 17 17 18 18 19 19 20 20 21 24
 explist              : 6 15
 stat                 : 3
 stat_list            : 2 3
-var                  : 11 12 21
+var                  : 11 12 22
 varlist              : 6 12
 
 Parsing method: LALR
@@ -71,14 +73,14 @@ state 0
     (8) stat -> . RETURN exp
     (9) stat -> . RETURN ;
     (10) stat -> . RETURN exp ;
-    (24) empty -> .
+    (25) empty -> .
     (11) varlist -> . var
     (12) varlist -> . var , varlist
     (13) var -> . IDENTIFIER
 
     ;               shift and go to state 6
     RETURN          shift and go to state 8
-    $end            reduce using rule 24 (empty -> .)
+    $end            reduce using rule 25 (empty -> .)
     IDENTIFIER      shift and go to state 10
 
     chunk                          shift and go to state 1
@@ -120,14 +122,14 @@ state 4
     (8) stat -> . RETURN exp
     (9) stat -> . RETURN ;
     (10) stat -> . RETURN exp ;
-    (24) empty -> .
+    (25) empty -> .
     (11) varlist -> . var
     (12) varlist -> . var , varlist
     (13) var -> . IDENTIFIER
 
     ;               shift and go to state 6
     RETURN          shift and go to state 8
-    $end            reduce using rule 24 (empty -> .)
+    $end            reduce using rule 25 (empty -> .)
     IDENTIFIER      shift and go to state 10
 
     stat                           shift and go to state 4
@@ -170,10 +172,11 @@ state 8
     (17) exp -> . exp MINUS exp
     (18) exp -> . exp TIMES exp
     (19) exp -> . exp DIVIDE exp
-    (20) exp -> . ( exp )
-    (21) exp -> . var
-    (22) exp -> . NUMBER
-    (23) exp -> . MINUS exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
     (13) var -> . IDENTIFIER
 
   ! shift/reduce conflict for ; resolved as shift
@@ -212,6 +215,7 @@ state 10
     MINUS           reduce using rule 13 (var -> IDENTIFIER .)
     TIMES           reduce using rule 13 (var -> IDENTIFIER .)
     DIVIDE          reduce using rule 13 (var -> IDENTIFIER .)
+    INTEGER_DIVIDE  reduce using rule 13 (var -> IDENTIFIER .)
     RETURN          reduce using rule 13 (var -> IDENTIFIER .)
     IDENTIFIER      reduce using rule 13 (var -> IDENTIFIER .)
     $end            reduce using rule 13 (var -> IDENTIFIER .)
@@ -234,10 +238,11 @@ state 12
     (17) exp -> . exp MINUS exp
     (18) exp -> . exp TIMES exp
     (19) exp -> . exp DIVIDE exp
-    (20) exp -> . ( exp )
-    (21) exp -> . var
-    (22) exp -> . NUMBER
-    (23) exp -> . MINUS exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
     (13) var -> . IDENTIFIER
 
     (               shift and go to state 16
@@ -257,6 +262,7 @@ state 13
     (17) exp -> exp . MINUS exp
     (18) exp -> exp . TIMES exp
     (19) exp -> exp . DIVIDE exp
+    (20) exp -> exp . INTEGER_DIVIDE exp
 
   ! shift/reduce conflict for ; resolved as shift
     RETURN          reduce using rule 8 (stat -> RETURN exp .)
@@ -267,6 +273,7 @@ state 13
     MINUS           shift and go to state 24
     TIMES           shift and go to state 25
     DIVIDE          shift and go to state 26
+    INTEGER_DIVIDE  shift and go to state 27
 
   ! ;               [ reduce using rule 8 (stat -> RETURN exp .) ]
 
@@ -283,36 +290,16 @@ state 14
 
 state 15
 
-    (23) exp -> MINUS . exp
+    (24) exp -> MINUS . exp
     (16) exp -> . exp PLUS exp
     (17) exp -> . exp MINUS exp
     (18) exp -> . exp TIMES exp
     (19) exp -> . exp DIVIDE exp
-    (20) exp -> . ( exp )
-    (21) exp -> . var
-    (22) exp -> . NUMBER
-    (23) exp -> . MINUS exp
-    (13) var -> . IDENTIFIER
-
-    (               shift and go to state 16
-    NUMBER          shift and go to state 18
-    MINUS           shift and go to state 15
-    IDENTIFIER      shift and go to state 10
-
-    exp                            shift and go to state 27
-    var                            shift and go to state 17
-
-state 16
-
-    (20) exp -> ( . exp )
-    (16) exp -> . exp PLUS exp
-    (17) exp -> . exp MINUS exp
-    (18) exp -> . exp TIMES exp
-    (19) exp -> . exp DIVIDE exp
-    (20) exp -> . ( exp )
-    (21) exp -> . var
-    (22) exp -> . NUMBER
-    (23) exp -> . MINUS exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
     (13) var -> . IDENTIFIER
 
     (               shift and go to state 16
@@ -323,36 +310,60 @@ state 16
     exp                            shift and go to state 28
     var                            shift and go to state 17
 
+state 16
+
+    (21) exp -> ( . exp )
+    (16) exp -> . exp PLUS exp
+    (17) exp -> . exp MINUS exp
+    (18) exp -> . exp TIMES exp
+    (19) exp -> . exp DIVIDE exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
+    (13) var -> . IDENTIFIER
+
+    (               shift and go to state 16
+    NUMBER          shift and go to state 18
+    MINUS           shift and go to state 15
+    IDENTIFIER      shift and go to state 10
+
+    exp                            shift and go to state 29
+    var                            shift and go to state 17
+
 state 17
 
-    (21) exp -> var .
+    (22) exp -> var .
 
-    ;               reduce using rule 21 (exp -> var .)
-    PLUS            reduce using rule 21 (exp -> var .)
-    MINUS           reduce using rule 21 (exp -> var .)
-    TIMES           reduce using rule 21 (exp -> var .)
-    DIVIDE          reduce using rule 21 (exp -> var .)
-    RETURN          reduce using rule 21 (exp -> var .)
-    IDENTIFIER      reduce using rule 21 (exp -> var .)
-    $end            reduce using rule 21 (exp -> var .)
-    ,               reduce using rule 21 (exp -> var .)
-    )               reduce using rule 21 (exp -> var .)
+    ;               reduce using rule 22 (exp -> var .)
+    PLUS            reduce using rule 22 (exp -> var .)
+    MINUS           reduce using rule 22 (exp -> var .)
+    TIMES           reduce using rule 22 (exp -> var .)
+    DIVIDE          reduce using rule 22 (exp -> var .)
+    INTEGER_DIVIDE  reduce using rule 22 (exp -> var .)
+    RETURN          reduce using rule 22 (exp -> var .)
+    IDENTIFIER      reduce using rule 22 (exp -> var .)
+    $end            reduce using rule 22 (exp -> var .)
+    ,               reduce using rule 22 (exp -> var .)
+    )               reduce using rule 22 (exp -> var .)
 
 
 state 18
 
-    (22) exp -> NUMBER .
+    (23) exp -> NUMBER .
 
-    ;               reduce using rule 22 (exp -> NUMBER .)
-    PLUS            reduce using rule 22 (exp -> NUMBER .)
-    MINUS           reduce using rule 22 (exp -> NUMBER .)
-    TIMES           reduce using rule 22 (exp -> NUMBER .)
-    DIVIDE          reduce using rule 22 (exp -> NUMBER .)
-    RETURN          reduce using rule 22 (exp -> NUMBER .)
-    IDENTIFIER      reduce using rule 22 (exp -> NUMBER .)
-    $end            reduce using rule 22 (exp -> NUMBER .)
-    ,               reduce using rule 22 (exp -> NUMBER .)
-    )               reduce using rule 22 (exp -> NUMBER .)
+    ;               reduce using rule 23 (exp -> NUMBER .)
+    PLUS            reduce using rule 23 (exp -> NUMBER .)
+    MINUS           reduce using rule 23 (exp -> NUMBER .)
+    TIMES           reduce using rule 23 (exp -> NUMBER .)
+    DIVIDE          reduce using rule 23 (exp -> NUMBER .)
+    INTEGER_DIVIDE  reduce using rule 23 (exp -> NUMBER .)
+    RETURN          reduce using rule 23 (exp -> NUMBER .)
+    IDENTIFIER      reduce using rule 23 (exp -> NUMBER .)
+    $end            reduce using rule 23 (exp -> NUMBER .)
+    ,               reduce using rule 23 (exp -> NUMBER .)
+    )               reduce using rule 23 (exp -> NUMBER .)
 
 
 state 19
@@ -365,7 +376,7 @@ state 19
     IDENTIFIER      shift and go to state 10
 
     var                            shift and go to state 9
-    varlist                        shift and go to state 29
+    varlist                        shift and go to state 30
 
 state 20
 
@@ -385,16 +396,18 @@ state 21
     (17) exp -> exp . MINUS exp
     (18) exp -> exp . TIMES exp
     (19) exp -> exp . DIVIDE exp
+    (20) exp -> exp . INTEGER_DIVIDE exp
 
     ;               reduce using rule 14 (explist -> exp .)
     RETURN          reduce using rule 14 (explist -> exp .)
     IDENTIFIER      reduce using rule 14 (explist -> exp .)
     $end            reduce using rule 14 (explist -> exp .)
-    ,               shift and go to state 30
+    ,               shift and go to state 31
     PLUS            shift and go to state 23
     MINUS           shift and go to state 24
     TIMES           shift and go to state 25
     DIVIDE          shift and go to state 26
+    INTEGER_DIVIDE  shift and go to state 27
 
 
 state 22
@@ -414,31 +427,11 @@ state 23
     (17) exp -> . exp MINUS exp
     (18) exp -> . exp TIMES exp
     (19) exp -> . exp DIVIDE exp
-    (20) exp -> . ( exp )
-    (21) exp -> . var
-    (22) exp -> . NUMBER
-    (23) exp -> . MINUS exp
-    (13) var -> . IDENTIFIER
-
-    (               shift and go to state 16
-    NUMBER          shift and go to state 18
-    MINUS           shift and go to state 15
-    IDENTIFIER      shift and go to state 10
-
-    exp                            shift and go to state 31
-    var                            shift and go to state 17
-
-state 24
-
-    (17) exp -> exp MINUS . exp
-    (16) exp -> . exp PLUS exp
-    (17) exp -> . exp MINUS exp
-    (18) exp -> . exp TIMES exp
-    (19) exp -> . exp DIVIDE exp
-    (20) exp -> . ( exp )
-    (21) exp -> . var
-    (22) exp -> . NUMBER
-    (23) exp -> . MINUS exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
     (13) var -> . IDENTIFIER
 
     (               shift and go to state 16
@@ -449,17 +442,18 @@ state 24
     exp                            shift and go to state 32
     var                            shift and go to state 17
 
-state 25
+state 24
 
-    (18) exp -> exp TIMES . exp
+    (17) exp -> exp MINUS . exp
     (16) exp -> . exp PLUS exp
     (17) exp -> . exp MINUS exp
     (18) exp -> . exp TIMES exp
     (19) exp -> . exp DIVIDE exp
-    (20) exp -> . ( exp )
-    (21) exp -> . var
-    (22) exp -> . NUMBER
-    (23) exp -> . MINUS exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
     (13) var -> . IDENTIFIER
 
     (               shift and go to state 16
@@ -470,17 +464,18 @@ state 25
     exp                            shift and go to state 33
     var                            shift and go to state 17
 
-state 26
+state 25
 
-    (19) exp -> exp DIVIDE . exp
+    (18) exp -> exp TIMES . exp
     (16) exp -> . exp PLUS exp
     (17) exp -> . exp MINUS exp
     (18) exp -> . exp TIMES exp
     (19) exp -> . exp DIVIDE exp
-    (20) exp -> . ( exp )
-    (21) exp -> . var
-    (22) exp -> . NUMBER
-    (23) exp -> . MINUS exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
     (13) var -> . IDENTIFIER
 
     (               shift and go to state 16
@@ -491,54 +486,103 @@ state 26
     exp                            shift and go to state 34
     var                            shift and go to state 17
 
+state 26
+
+    (19) exp -> exp DIVIDE . exp
+    (16) exp -> . exp PLUS exp
+    (17) exp -> . exp MINUS exp
+    (18) exp -> . exp TIMES exp
+    (19) exp -> . exp DIVIDE exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
+    (13) var -> . IDENTIFIER
+
+    (               shift and go to state 16
+    NUMBER          shift and go to state 18
+    MINUS           shift and go to state 15
+    IDENTIFIER      shift and go to state 10
+
+    exp                            shift and go to state 35
+    var                            shift and go to state 17
+
 state 27
 
-    (23) exp -> MINUS exp .
+    (20) exp -> exp INTEGER_DIVIDE . exp
+    (16) exp -> . exp PLUS exp
+    (17) exp -> . exp MINUS exp
+    (18) exp -> . exp TIMES exp
+    (19) exp -> . exp DIVIDE exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
+    (13) var -> . IDENTIFIER
+
+    (               shift and go to state 16
+    NUMBER          shift and go to state 18
+    MINUS           shift and go to state 15
+    IDENTIFIER      shift and go to state 10
+
+    exp                            shift and go to state 36
+    var                            shift and go to state 17
+
+state 28
+
+    (24) exp -> MINUS exp .
     (16) exp -> exp . PLUS exp
     (17) exp -> exp . MINUS exp
     (18) exp -> exp . TIMES exp
     (19) exp -> exp . DIVIDE exp
+    (20) exp -> exp . INTEGER_DIVIDE exp
 
-    ;               reduce using rule 23 (exp -> MINUS exp .)
-    PLUS            reduce using rule 23 (exp -> MINUS exp .)
-    MINUS           reduce using rule 23 (exp -> MINUS exp .)
-    TIMES           reduce using rule 23 (exp -> MINUS exp .)
-    DIVIDE          reduce using rule 23 (exp -> MINUS exp .)
-    RETURN          reduce using rule 23 (exp -> MINUS exp .)
-    IDENTIFIER      reduce using rule 23 (exp -> MINUS exp .)
-    $end            reduce using rule 23 (exp -> MINUS exp .)
-    ,               reduce using rule 23 (exp -> MINUS exp .)
-    )               reduce using rule 23 (exp -> MINUS exp .)
+    ;               reduce using rule 24 (exp -> MINUS exp .)
+    PLUS            reduce using rule 24 (exp -> MINUS exp .)
+    MINUS           reduce using rule 24 (exp -> MINUS exp .)
+    TIMES           reduce using rule 24 (exp -> MINUS exp .)
+    DIVIDE          reduce using rule 24 (exp -> MINUS exp .)
+    INTEGER_DIVIDE  reduce using rule 24 (exp -> MINUS exp .)
+    RETURN          reduce using rule 24 (exp -> MINUS exp .)
+    IDENTIFIER      reduce using rule 24 (exp -> MINUS exp .)
+    $end            reduce using rule 24 (exp -> MINUS exp .)
+    ,               reduce using rule 24 (exp -> MINUS exp .)
+    )               reduce using rule 24 (exp -> MINUS exp .)
 
   ! PLUS            [ shift and go to state 23 ]
   ! MINUS           [ shift and go to state 24 ]
   ! TIMES           [ shift and go to state 25 ]
   ! DIVIDE          [ shift and go to state 26 ]
+  ! INTEGER_DIVIDE  [ shift and go to state 27 ]
 
 
-state 28
+state 29
 
-    (20) exp -> ( exp . )
+    (21) exp -> ( exp . )
     (16) exp -> exp . PLUS exp
     (17) exp -> exp . MINUS exp
     (18) exp -> exp . TIMES exp
     (19) exp -> exp . DIVIDE exp
+    (20) exp -> exp . INTEGER_DIVIDE exp
 
-    )               shift and go to state 35
+    )               shift and go to state 37
     PLUS            shift and go to state 23
     MINUS           shift and go to state 24
     TIMES           shift and go to state 25
     DIVIDE          shift and go to state 26
+    INTEGER_DIVIDE  shift and go to state 27
 
 
-state 29
+state 30
 
     (12) varlist -> var , varlist .
 
     =               reduce using rule 12 (varlist -> var , varlist .)
 
 
-state 30
+state 31
 
     (15) explist -> exp , . explist
     (14) explist -> . exp
@@ -547,10 +591,11 @@ state 30
     (17) exp -> . exp MINUS exp
     (18) exp -> . exp TIMES exp
     (19) exp -> . exp DIVIDE exp
-    (20) exp -> . ( exp )
-    (21) exp -> . var
-    (22) exp -> . NUMBER
-    (23) exp -> . MINUS exp
+    (20) exp -> . exp INTEGER_DIVIDE exp
+    (21) exp -> . ( exp )
+    (22) exp -> . var
+    (23) exp -> . NUMBER
+    (24) exp -> . MINUS exp
     (13) var -> . IDENTIFIER
 
     (               shift and go to state 16
@@ -559,20 +604,22 @@ state 30
     IDENTIFIER      shift and go to state 10
 
     exp                            shift and go to state 21
-    explist                        shift and go to state 36
+    explist                        shift and go to state 38
     var                            shift and go to state 17
 
-state 31
+state 32
 
     (16) exp -> exp PLUS exp .
     (16) exp -> exp . PLUS exp
     (17) exp -> exp . MINUS exp
     (18) exp -> exp . TIMES exp
     (19) exp -> exp . DIVIDE exp
+    (20) exp -> exp . INTEGER_DIVIDE exp
 
     ;               reduce using rule 16 (exp -> exp PLUS exp .)
     PLUS            reduce using rule 16 (exp -> exp PLUS exp .)
     MINUS           reduce using rule 16 (exp -> exp PLUS exp .)
+    INTEGER_DIVIDE  reduce using rule 16 (exp -> exp PLUS exp .)
     RETURN          reduce using rule 16 (exp -> exp PLUS exp .)
     IDENTIFIER      reduce using rule 16 (exp -> exp PLUS exp .)
     $end            reduce using rule 16 (exp -> exp PLUS exp .)
@@ -585,19 +632,22 @@ state 31
   ! DIVIDE          [ reduce using rule 16 (exp -> exp PLUS exp .) ]
   ! PLUS            [ shift and go to state 23 ]
   ! MINUS           [ shift and go to state 24 ]
+  ! INTEGER_DIVIDE  [ shift and go to state 27 ]
 
 
-state 32
+state 33
 
     (17) exp -> exp MINUS exp .
     (16) exp -> exp . PLUS exp
     (17) exp -> exp . MINUS exp
     (18) exp -> exp . TIMES exp
     (19) exp -> exp . DIVIDE exp
+    (20) exp -> exp . INTEGER_DIVIDE exp
 
     ;               reduce using rule 17 (exp -> exp MINUS exp .)
     PLUS            reduce using rule 17 (exp -> exp MINUS exp .)
     MINUS           reduce using rule 17 (exp -> exp MINUS exp .)
+    INTEGER_DIVIDE  reduce using rule 17 (exp -> exp MINUS exp .)
     RETURN          reduce using rule 17 (exp -> exp MINUS exp .)
     IDENTIFIER      reduce using rule 17 (exp -> exp MINUS exp .)
     $end            reduce using rule 17 (exp -> exp MINUS exp .)
@@ -610,21 +660,24 @@ state 32
   ! DIVIDE          [ reduce using rule 17 (exp -> exp MINUS exp .) ]
   ! PLUS            [ shift and go to state 23 ]
   ! MINUS           [ shift and go to state 24 ]
+  ! INTEGER_DIVIDE  [ shift and go to state 27 ]
 
 
-state 33
+state 34
 
     (18) exp -> exp TIMES exp .
     (16) exp -> exp . PLUS exp
     (17) exp -> exp . MINUS exp
     (18) exp -> exp . TIMES exp
     (19) exp -> exp . DIVIDE exp
+    (20) exp -> exp . INTEGER_DIVIDE exp
 
     ;               reduce using rule 18 (exp -> exp TIMES exp .)
     PLUS            reduce using rule 18 (exp -> exp TIMES exp .)
     MINUS           reduce using rule 18 (exp -> exp TIMES exp .)
     TIMES           reduce using rule 18 (exp -> exp TIMES exp .)
     DIVIDE          reduce using rule 18 (exp -> exp TIMES exp .)
+    INTEGER_DIVIDE  reduce using rule 18 (exp -> exp TIMES exp .)
     RETURN          reduce using rule 18 (exp -> exp TIMES exp .)
     IDENTIFIER      reduce using rule 18 (exp -> exp TIMES exp .)
     $end            reduce using rule 18 (exp -> exp TIMES exp .)
@@ -635,21 +688,24 @@ state 33
   ! MINUS           [ shift and go to state 24 ]
   ! TIMES           [ shift and go to state 25 ]
   ! DIVIDE          [ shift and go to state 26 ]
+  ! INTEGER_DIVIDE  [ shift and go to state 27 ]
 
 
-state 34
+state 35
 
     (19) exp -> exp DIVIDE exp .
     (16) exp -> exp . PLUS exp
     (17) exp -> exp . MINUS exp
     (18) exp -> exp . TIMES exp
     (19) exp -> exp . DIVIDE exp
+    (20) exp -> exp . INTEGER_DIVIDE exp
 
     ;               reduce using rule 19 (exp -> exp DIVIDE exp .)
     PLUS            reduce using rule 19 (exp -> exp DIVIDE exp .)
     MINUS           reduce using rule 19 (exp -> exp DIVIDE exp .)
     TIMES           reduce using rule 19 (exp -> exp DIVIDE exp .)
     DIVIDE          reduce using rule 19 (exp -> exp DIVIDE exp .)
+    INTEGER_DIVIDE  reduce using rule 19 (exp -> exp DIVIDE exp .)
     RETURN          reduce using rule 19 (exp -> exp DIVIDE exp .)
     IDENTIFIER      reduce using rule 19 (exp -> exp DIVIDE exp .)
     $end            reduce using rule 19 (exp -> exp DIVIDE exp .)
@@ -660,25 +716,60 @@ state 34
   ! MINUS           [ shift and go to state 24 ]
   ! TIMES           [ shift and go to state 25 ]
   ! DIVIDE          [ shift and go to state 26 ]
-
-
-state 35
-
-    (20) exp -> ( exp ) .
-
-    ;               reduce using rule 20 (exp -> ( exp ) .)
-    PLUS            reduce using rule 20 (exp -> ( exp ) .)
-    MINUS           reduce using rule 20 (exp -> ( exp ) .)
-    TIMES           reduce using rule 20 (exp -> ( exp ) .)
-    DIVIDE          reduce using rule 20 (exp -> ( exp ) .)
-    RETURN          reduce using rule 20 (exp -> ( exp ) .)
-    IDENTIFIER      reduce using rule 20 (exp -> ( exp ) .)
-    $end            reduce using rule 20 (exp -> ( exp ) .)
-    ,               reduce using rule 20 (exp -> ( exp ) .)
-    )               reduce using rule 20 (exp -> ( exp ) .)
+  ! INTEGER_DIVIDE  [ shift and go to state 27 ]
 
 
 state 36
+
+    (20) exp -> exp INTEGER_DIVIDE exp .
+    (16) exp -> exp . PLUS exp
+    (17) exp -> exp . MINUS exp
+    (18) exp -> exp . TIMES exp
+    (19) exp -> exp . DIVIDE exp
+    (20) exp -> exp . INTEGER_DIVIDE exp
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for INTEGER_DIVIDE resolved as shift
+    ;               reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .)
+    RETURN          reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .)
+    IDENTIFIER      reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .)
+    $end            reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .)
+    ,               reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .)
+    )               reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .)
+    PLUS            shift and go to state 23
+    MINUS           shift and go to state 24
+    TIMES           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    INTEGER_DIVIDE  shift and go to state 27
+
+  ! PLUS            [ reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .) ]
+  ! MINUS           [ reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .) ]
+  ! TIMES           [ reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .) ]
+  ! DIVIDE          [ reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .) ]
+  ! INTEGER_DIVIDE  [ reduce using rule 20 (exp -> exp INTEGER_DIVIDE exp .) ]
+
+
+state 37
+
+    (21) exp -> ( exp ) .
+
+    ;               reduce using rule 21 (exp -> ( exp ) .)
+    PLUS            reduce using rule 21 (exp -> ( exp ) .)
+    MINUS           reduce using rule 21 (exp -> ( exp ) .)
+    TIMES           reduce using rule 21 (exp -> ( exp ) .)
+    DIVIDE          reduce using rule 21 (exp -> ( exp ) .)
+    INTEGER_DIVIDE  reduce using rule 21 (exp -> ( exp ) .)
+    RETURN          reduce using rule 21 (exp -> ( exp ) .)
+    IDENTIFIER      reduce using rule 21 (exp -> ( exp ) .)
+    $end            reduce using rule 21 (exp -> ( exp ) .)
+    ,               reduce using rule 21 (exp -> ( exp ) .)
+    )               reduce using rule 21 (exp -> ( exp ) .)
+
+
+state 38
 
     (15) explist -> exp , explist .
 
@@ -693,3 +784,8 @@ WARNING:
 WARNING: shift/reduce conflict for ; in state 8 resolved as shift
 WARNING: shift/reduce conflict for IDENTIFIER in state 8 resolved as shift
 WARNING: shift/reduce conflict for ; in state 13 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 36 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 36 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 36 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 36 resolved as shift
+WARNING: shift/reduce conflict for INTEGER_DIVIDE in state 36 resolved as shift

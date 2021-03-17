@@ -82,7 +82,8 @@ def p_exp_binop(p):
     """exp : exp PLUS exp
            | exp MINUS exp
            | exp TIMES exp
-           | exp DIVIDE exp"""
+           | exp DIVIDE exp
+           | exp INTEGER_DIVIDE exp"""
     p[0] = BinopExp(p[1], p[2], p[3])
 
 
@@ -133,7 +134,7 @@ def parse(data, debug=0):
 if __name__ == "__main__":
     # Test it out
     data = '''
-    a, b, c = 1, 2, 3
+    a = 1//3
     '''
 
     # Give the parser some input

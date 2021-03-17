@@ -1,9 +1,25 @@
 Current grammar
 
-exp ::=  exp PLUS exp
-       | exp MINUS exp
-       | exp TIMES exp
-       | exp DIVIDE exp
-       | '(' exp ')'
-       | NUMBER
+chunk ::= block
 
+block ::= stat_list
+
+stat_list ::= stat stat_list
+            | empty
+
+stat ::= var '=' exp
+       | RETURN
+       | RETURN exp
+       | RETURN ';'
+       | RETURN exp ';'
+
+exp ::= exp PLUS exp
+      | exp MINUS exp
+      | exp TIMES exp
+      | exp DIVIDE exp
+      | '(' exp ')'
+      | unop exp
+      | var
+      | NUMBER
+
+var ::= IDENTIFIER

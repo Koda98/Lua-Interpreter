@@ -12,6 +12,47 @@ precedence = (
     ('right', 'UMINUS')
 )
 
+
+def p_chunk(p):
+    """chunk : block"""
+    p[0] = Chunk(p[1])
+
+
+def p_block(p):
+    """block : stat_list"""
+    if len(p) == 3:
+        p[0] = Block(p[1], p[2])
+    else:
+        p[0] = Block(p[1])
+
+
+def p_stat_list(p):
+    """stat_list : stat stat_list
+                 | empty"""
+    if len(p) == 3:
+        p[0] = StatList(p[1], p[2])
+    else:
+        p[0] = Empty()
+
+
+def p_stat_assign(p):
+    """stat : var '=' exp"""
+    p[0] = AssignStat(p[1], p[3])
+
+
+def p_stat_return(p):
+    """stat : RETURN
+            | RETURN exp
+            | RETURN ';'
+            | RETURN exp ';'"""
+    if len(p) == 2:
+        p[0] = RetStat()
+    elif p[2] == ";":
+        p[0] = RetStat()
+    else:
+        p[0] = RetStat(p[2])
+
+
 def p_exp_binop(p):
     """exp : exp PLUS exp
            | exp MINUS exp
@@ -24,13 +65,15 @@ def p_exp_group(p):
     """exp : '(' exp ')'"""
     p[0] = GroupExp(p[2])
 
-# def p_stat_assign(p):
-#     """stat : IDENTIFIER '=' exp"""
-#     p[0] = Variable(p[1], p[3])
 
-# def p_exp_var(p):
-#     """exp : IDENTIFIER"""
-#     p[0] = Variable(p[1])
+def p_exp_var(p):
+    """exp : var"""
+    p[0] = Variable(p[1])
+
+
+def p_var(p):
+    """var : IDENTIFIER"""
+    p[0] = Variable(p[1])
 
 
 def p_exp_numeral(p):
@@ -41,6 +84,11 @@ def p_exp_numeral(p):
 def p_exp_unop(p):
     """exp : MINUS exp %prec UMINUS"""
     p[0] = UnopExp(p[1], p[2])
+
+
+def p_empty(p):
+    """empty :"""
+    p[0] = Empty()
 
 
 def p_error(p):
@@ -65,8 +113,8 @@ def parse(data, debug=0):
 if __name__ == "__main__":
     # Test it out
     data = '''
-    3 + 4.4 * .10
-      + (20 * 2)
+    a = 9 + 1
+    return a
     '''
 
     # Give the parser some input

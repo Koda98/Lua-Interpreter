@@ -4,11 +4,13 @@
 
 import ply.lex as lex
 
-keywords = {}
+keywords = {
+    "return": "RETURN"
+}
 
 
 tokens = [
-    # 'IDENTIFIER',
+    'IDENTIFIER',
     'NUMBER',
     'PLUS',
     'MINUS',
@@ -16,7 +18,7 @@ tokens = [
     'DIVIDE',
 ]
 
-literals = ["(", ")", '=']
+literals = ["(", ")", '=', ';']
 
 tokens += keywords.values()
 
@@ -34,10 +36,10 @@ def t_NUMBER(t):
         return t
 
 
-# def t_IDENTIFIER(t):
-#     r'[a-zA-Z_][a-zA-Z0-9]*'
-#     t.type = keywords.get(t.value, 'IDENTIFIER')    # Check for reserved words
-#     return t
+def t_IDENTIFIER(t):
+    r'[a-zA-Z_][a-zA-Z0-9]*'
+    t.type = keywords.get(t.value, 'IDENTIFIER')    # Check for reserved words
+    return t
 
 
 # Define a rule so we can track line numbers
@@ -63,8 +65,8 @@ lexer = lex.lex(debug=False)
 if __name__ == "__main__":
     # Test it out
     data = '''
-    (4 - 6) * (3 * 2) / 2
-      + (20 * 2)
+    a = 1 + 3
+    return a;
     '''
 
     # Give the lexer some input

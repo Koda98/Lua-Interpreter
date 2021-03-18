@@ -16,6 +16,8 @@ keywords = {
     "not": "NOT",
     "while": "WHILE",
     "break": "BREAK",
+    "if": "IF",
+    "then": "THEN",
 }
 
 
@@ -89,10 +91,8 @@ if __name__ == "__main__":
     # Test it out
     data = '''
     a = 1
-    b = 1
-    while a < 3 do
-        a = a + 1
-        b = b + 3
+    if 9 >= 2 then
+        a = 3
     end
     '''
 

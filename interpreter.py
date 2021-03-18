@@ -49,6 +49,11 @@ class Interpreter(NodeVisitor):
                 break
             cond = self.visit(node.exp)
 
+    def visit_IfStat(self, node):
+        cond = self.visit(node.exp)
+        if cond:
+            self.visit(node.block)
+
     def visit_RetStat(self, node):
         return self.visit(node.exp)
 
@@ -143,11 +148,8 @@ def main(inter_debug=False, parse_debug=False):
 
     s = """
     a = 1
-    b = 1
-    while a < 3 do
-        a = a + 1
-        b = b + 3
-        break
+    if 9 == 2 then
+        a = 3
     end
     """
 

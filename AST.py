@@ -63,6 +63,15 @@ class WhileStat(AST):
         return f"WhileStat({self.exp} do {self.block} end)"
 
 
+class IfStat(AST):
+    def __init__(self, exp, block):
+        self.exp = exp
+        self.block = block
+
+    def __str__(self):
+        return f"IfStat({self.exp} then {self.block} end)"
+
+
 class RetStat(AST):
     def __init__(self, exp=None):
         self.exp = exp

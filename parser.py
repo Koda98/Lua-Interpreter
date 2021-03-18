@@ -55,6 +55,11 @@ def p_stat_while(p):
     p[0] = WhileStat(p[2], p[4])
 
 
+def p_stat_if(p):
+    """stat : IF exp THEN block END"""
+    p[0] = IfStat(p[2], p[4])
+
+
 def p_stat_assign(p):
     """stat : varlist '=' explist"""
     p[0] = AssignStat(p[1], p[3])
@@ -173,11 +178,8 @@ if __name__ == "__main__":
     # Test it out
     data = '''
     a = 1
-    b = 1
-    while a < 3 do
-        a = a + 1
-        b = b + 3
-        break
+    if 9 >= 2 then
+        a = 3
     end
     '''
 

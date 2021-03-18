@@ -64,12 +64,17 @@ class WhileStat(AST):
 
 
 class IfStat(AST):
-    def __init__(self, exp, block):
+    def __init__(self, exp, if_block, else_block=None):
         self.exp = exp
-        self.block = block
+        self.if_block = if_block
+        self.else_block = else_block
 
     def __str__(self):
-        return f"IfStat({self.exp} then {self.block} end)"
+        if self.else_block:
+            return f"IfStat({self.exp} then {self.if_block} " \
+                   f"else {self.else_block} end)"
+        else:
+            return f"IfStat({self.exp} then {self.if_block} end)"
 
 
 class RetStat(AST):

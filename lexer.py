@@ -18,6 +18,7 @@ keywords = {
     "break": "BREAK",
     "if": "IF",
     "then": "THEN",
+    "else": "ELSE",
 }
 
 
@@ -93,6 +94,8 @@ if __name__ == "__main__":
     a = 1
     if 9 >= 2 then
         a = 3
+    else
+        a = 2
     end
     '''
 

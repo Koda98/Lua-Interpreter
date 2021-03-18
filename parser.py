@@ -56,8 +56,12 @@ def p_stat_while(p):
 
 
 def p_stat_if(p):
-    """stat : IF exp THEN block END"""
-    p[0] = IfStat(p[2], p[4])
+    """stat : IF exp THEN block END
+            | IF exp THEN block ELSE block END"""
+    if len(p) == 5:
+        p[0] = IfStat(p[2], p[4])
+    else:
+        p[0] = IfStat(p[2], p[4], p[6])
 
 
 def p_stat_assign(p):
@@ -180,6 +184,8 @@ if __name__ == "__main__":
     a = 1
     if 9 >= 2 then
         a = 3
+    else
+        a = 2
     end
     '''
 

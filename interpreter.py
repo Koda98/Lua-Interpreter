@@ -52,7 +52,9 @@ class Interpreter(NodeVisitor):
     def visit_IfStat(self, node):
         cond = self.visit(node.exp)
         if cond:
-            self.visit(node.block)
+            self.visit(node.if_block)
+        elif node.else_block:
+            self.visit(node.else_block)
 
     def visit_RetStat(self, node):
         return self.visit(node.exp)
@@ -148,8 +150,10 @@ def main(inter_debug=False, parse_debug=False):
 
     s = """
     a = 1
-    if 9 == 2 then
+    if 9 <= 2 then
         a = 3
+    else
+        a = 2
     end
     """
 

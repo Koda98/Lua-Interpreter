@@ -9,6 +9,11 @@ stat_list ::= stat stat_list
 
 stat ::= ';'
        | varlist '=' explist
+       | BREAK
+       | DO block END
+       | WHILE exp DO block END
+       | IF exp THEN block END
+       | IF exp THEN block ELSE block END
        | RETURN
        | RETURN exp
        | RETURN ';'
@@ -24,10 +29,23 @@ exp ::= exp PLUS exp
       | exp MINUS exp
       | exp TIMES exp
       | exp DIVIDE exp
+      | exp INTEGER_DIVIDE exp
+      | exp LT exp
+      | exp GT exp
+      | exp LTE exp
+      | exp GTE exp
+      | exp EQUALS exp
+      | exp NE exp
+      | exp AND exp
+      | exp OR exp
       | '(' exp ')'
-      | unop exp
+      | MINUS exp
+      | NOT exp
       | var
       | NUMBER
+      | FALSE
+      | TRUE
+      | NIL
 
 var ::= IDENTIFIER
 

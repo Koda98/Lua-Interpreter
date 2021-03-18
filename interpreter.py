@@ -47,7 +47,6 @@ class Interpreter(NodeVisitor):
         return varlist
 
     def visit_Explist(self, node):
-        # self.visit(node.exp)
         explist = [node.exp]
         if node.other:
             explist += self.visit(node.other)
@@ -66,16 +65,36 @@ class Interpreter(NodeVisitor):
             return self.visit(node.left) / self.visit(node.right)
         elif node.op == "//":
             return self.visit(node.left) // self.visit(node.right)
+        elif node.op == "<":
+            return self.visit(node.left) < self.visit(node.right)
+        elif node.op == ">":
+            return self.visit(node.left) > self.visit(node.right)
+        elif node.op == "<=":
+            return self.visit(node.left) <= self.visit(node.right)
+        elif node.op == ">=":
+            return self.visit(node.left) >= self.visit(node.right)
+        elif node.op == "==":
+            return self.visit(node.left) == self.visit(node.right)
+        elif node.op == "~=":
+            return self.visit(node.left) != self.visit(node.right)
 
     def visit_UnopExp(self, node):
         if node.op == "-":
             return -1 * self.visit(node.exp)
+        elif node.op == "not":
+            return not self.visit(node.exp)
 
     def visit_GroupExp(self, node):
         return self.visit(node.exp)
 
     def visit_VarExp(self, node):
         return self.visit(node.var)
+
+    def visit_BoolExp(self, node):
+        if node.value == "true":
+            return True
+        else:
+            return False
 
     def visit_Numeral(self, node):
         if node.negative:
@@ -104,7 +123,8 @@ def main(inter_debug=False, parse_debug=False):
 
     s = """
     do
-    a = 14//3
+    a = 1 < 2
+    c = not (4 == 1)
     end
     """
 

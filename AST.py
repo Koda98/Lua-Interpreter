@@ -113,6 +113,14 @@ class VarExp(AST):
         return f"VarExp({self.var})"
 
 
+class BoolExp(AST):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return f"BoolExp({self.value})"
+
+
 class Numeral(AST):
     def __init__(self, value, negative=False):
         self.value = value

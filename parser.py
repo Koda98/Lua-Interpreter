@@ -7,9 +7,12 @@ from AST import *
 tokens = lexer.tokens
 
 precedence = (
+    ('nonassoc', 'OR'),
+    ('nonassoc', 'AND'),
+    ('nonassoc', 'LT', 'GT', 'LTE', 'GTE', 'EQUALS', 'NE'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE', 'INTEGER_DIVIDE'),
-    ('right', 'UMINUS')
+    ('right', 'UMINUS', 'NOT')
 )
 
 
@@ -88,7 +91,15 @@ def p_exp_binop(p):
            | exp MINUS exp
            | exp TIMES exp
            | exp DIVIDE exp
-           | exp INTEGER_DIVIDE exp"""
+           | exp INTEGER_DIVIDE exp
+           | exp LT exp
+           | exp GT exp
+           | exp LTE exp
+           | exp GTE exp
+           | exp EQUALS exp
+           | exp NE exp
+           | exp AND exp
+           | exp OR exp"""
     p[0] = BinopExp(p[1], p[2], p[3])
 
 
@@ -108,8 +119,20 @@ def p_exp_numeral(p):
 
 
 def p_exp_unop(p):
-    """exp : MINUS exp %prec UMINUS"""
+    """exp : MINUS exp %prec UMINUS
+           | NOT exp"""
     p[0] = UnopExp(p[1], p[2])
+
+
+def p_exp_bool(p):
+    """exp : FALSE
+           | TRUE"""
+    p[0] = BoolExp(p[1])
+
+
+def p_exp_nil(p):
+    """exp : NIL"""
+    p[0] = Empty()
 
 
 def p_empty(p):
@@ -140,7 +163,8 @@ if __name__ == "__main__":
     # Test it out
     data = '''
     do
-    a = 1//3
+    a = 1 < 3
+    b = not 4 == 1
     end
     '''
 

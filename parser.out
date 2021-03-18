@@ -24,29 +24,53 @@ Rule 18    exp -> exp MINUS exp
 Rule 19    exp -> exp TIMES exp
 Rule 20    exp -> exp DIVIDE exp
 Rule 21    exp -> exp INTEGER_DIVIDE exp
-Rule 22    exp -> ( exp )
-Rule 23    exp -> var
-Rule 24    exp -> NUMBER
-Rule 25    exp -> MINUS exp
-Rule 26    empty -> <empty>
+Rule 22    exp -> exp LT exp
+Rule 23    exp -> exp GT exp
+Rule 24    exp -> exp LTE exp
+Rule 25    exp -> exp GTE exp
+Rule 26    exp -> exp EQUALS exp
+Rule 27    exp -> exp NE exp
+Rule 28    exp -> exp AND exp
+Rule 29    exp -> exp OR exp
+Rule 30    exp -> ( exp )
+Rule 31    exp -> var
+Rule 32    exp -> NUMBER
+Rule 33    exp -> MINUS exp
+Rule 34    exp -> NOT exp
+Rule 35    exp -> FALSE
+Rule 36    exp -> TRUE
+Rule 37    exp -> NIL
+Rule 38    empty -> <empty>
 
 Terminals, with rules where they appear
 
-(                    : 22
-)                    : 22
+(                    : 30
+)                    : 30
 ,                    : 13 16
 ;                    : 5 10 11
 =                    : 7
+AND                  : 28
 DIVIDE               : 20
 DO                   : 6
 END                  : 6
+EQUALS               : 26
+FALSE                : 35
+GT                   : 23
+GTE                  : 25
 IDENTIFIER           : 14
 INTEGER_DIVIDE       : 21
-MINUS                : 18 25
-NUMBER               : 24
+LT                   : 22
+LTE                  : 24
+MINUS                : 18 33
+NE                   : 27
+NIL                  : 37
+NOT                  : 34
+NUMBER               : 32
+OR                   : 29
 PLUS                 : 17
 RETURN               : 8 9 10 11
 TIMES                : 19
+TRUE                 : 36
 error                : 
 
 Nonterminals, with rules where they appear
@@ -54,11 +78,11 @@ Nonterminals, with rules where they appear
 block                : 1 6
 chunk                : 0
 empty                : 4
-exp                  : 15 16 17 17 18 18 19 19 20 20 21 21 22 25
+exp                  : 15 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26 27 27 28 28 29 29 30 33 34
 explist              : 7 9 11 16
 stat                 : 3
 stat_list            : 2 3
-var                  : 12 13 23
+var                  : 12 13 31
 varlist              : 7 13
 
 Parsing method: LALR
@@ -77,7 +101,7 @@ state 0
     (9) stat -> . RETURN explist
     (10) stat -> . RETURN ;
     (11) stat -> . RETURN explist ;
-    (26) empty -> .
+    (38) empty -> .
     (12) varlist -> . var
     (13) varlist -> . var , varlist
     (14) var -> . IDENTIFIER
@@ -85,7 +109,7 @@ state 0
     ;               shift and go to state 6
     DO              shift and go to state 7
     RETURN          shift and go to state 9
-    $end            reduce using rule 26 (empty -> .)
+    $end            reduce using rule 38 (empty -> .)
     IDENTIFIER      shift and go to state 11
 
     chunk                          shift and go to state 1
@@ -129,7 +153,7 @@ state 4
     (9) stat -> . RETURN explist
     (10) stat -> . RETURN ;
     (11) stat -> . RETURN explist ;
-    (26) empty -> .
+    (38) empty -> .
     (12) varlist -> . var
     (13) varlist -> . var , varlist
     (14) var -> . IDENTIFIER
@@ -137,8 +161,8 @@ state 4
     ;               shift and go to state 6
     DO              shift and go to state 7
     RETURN          shift and go to state 9
-    $end            reduce using rule 26 (empty -> .)
-    END             reduce using rule 26 (empty -> .)
+    $end            reduce using rule 38 (empty -> .)
+    END             reduce using rule 38 (empty -> .)
     IDENTIFIER      shift and go to state 11
 
     stat                           shift and go to state 4
@@ -180,7 +204,7 @@ state 7
     (9) stat -> . RETURN explist
     (10) stat -> . RETURN ;
     (11) stat -> . RETURN explist ;
-    (26) empty -> .
+    (38) empty -> .
     (12) varlist -> . var
     (13) varlist -> . var , varlist
     (14) var -> . IDENTIFIER
@@ -188,7 +212,7 @@ state 7
     ;               shift and go to state 6
     DO              shift and go to state 7
     RETURN          shift and go to state 9
-    END             reduce using rule 26 (empty -> .)
+    END             reduce using rule 38 (empty -> .)
     IDENTIFIER      shift and go to state 11
 
     block                          shift and go to state 13
@@ -218,10 +242,22 @@ state 9
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
   ! shift/reduce conflict for ; resolved as shift
@@ -234,6 +270,10 @@ state 9
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
   ! ;               [ reduce using rule 8 (stat -> RETURN .) ]
@@ -249,7 +289,7 @@ state 10
     (13) varlist -> var . , varlist
 
     =               reduce using rule 12 (varlist -> var .)
-    ,               shift and go to state 22
+    ,               shift and go to state 26
 
 
 state 11
@@ -263,6 +303,14 @@ state 11
     TIMES           reduce using rule 14 (var -> IDENTIFIER .)
     DIVIDE          reduce using rule 14 (var -> IDENTIFIER .)
     INTEGER_DIVIDE  reduce using rule 14 (var -> IDENTIFIER .)
+    LT              reduce using rule 14 (var -> IDENTIFIER .)
+    GT              reduce using rule 14 (var -> IDENTIFIER .)
+    LTE             reduce using rule 14 (var -> IDENTIFIER .)
+    GTE             reduce using rule 14 (var -> IDENTIFIER .)
+    EQUALS          reduce using rule 14 (var -> IDENTIFIER .)
+    NE              reduce using rule 14 (var -> IDENTIFIER .)
+    AND             reduce using rule 14 (var -> IDENTIFIER .)
+    OR              reduce using rule 14 (var -> IDENTIFIER .)
     ;               reduce using rule 14 (var -> IDENTIFIER .)
     DO              reduce using rule 14 (var -> IDENTIFIER .)
     RETURN          reduce using rule 14 (var -> IDENTIFIER .)
@@ -284,7 +332,7 @@ state 13
 
     (6) stat -> DO block . END
 
-    END             shift and go to state 23
+    END             shift and go to state 27
 
 
 state 14
@@ -297,18 +345,34 @@ state 14
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
-    explist                        shift and go to state 24
+    explist                        shift and go to state 28
     exp                            shift and go to state 17
     var                            shift and go to state 20
 
@@ -323,7 +387,7 @@ state 15
     IDENTIFIER      reduce using rule 9 (stat -> RETURN explist .)
     $end            reduce using rule 9 (stat -> RETURN explist .)
     END             reduce using rule 9 (stat -> RETURN explist .)
-    ;               shift and go to state 25
+    ;               shift and go to state 29
 
   ! ;               [ reduce using rule 9 (stat -> RETURN explist .) ]
 
@@ -349,6 +413,14 @@ state 17
     (19) exp -> exp . TIMES exp
     (20) exp -> exp . DIVIDE exp
     (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
 
     ;               reduce using rule 15 (explist -> exp .)
     DO              reduce using rule 15 (explist -> exp .)
@@ -356,97 +428,272 @@ state 17
     IDENTIFIER      reduce using rule 15 (explist -> exp .)
     $end            reduce using rule 15 (explist -> exp .)
     END             reduce using rule 15 (explist -> exp .)
-    ,               shift and go to state 26
-    PLUS            shift and go to state 27
-    MINUS           shift and go to state 28
-    TIMES           shift and go to state 29
-    DIVIDE          shift and go to state 30
-    INTEGER_DIVIDE  shift and go to state 31
+    ,               shift and go to state 30
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+    LT              shift and go to state 36
+    GT              shift and go to state 37
+    LTE             shift and go to state 38
+    GTE             shift and go to state 39
+    EQUALS          shift and go to state 40
+    NE              shift and go to state 41
+    AND             shift and go to state 42
+    OR              shift and go to state 43
 
 
 state 18
 
-    (25) exp -> MINUS . exp
+    (33) exp -> MINUS . exp
     (17) exp -> . exp PLUS exp
     (18) exp -> . exp MINUS exp
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
-    exp                            shift and go to state 32
+    exp                            shift and go to state 44
     var                            shift and go to state 20
 
 state 19
 
-    (22) exp -> ( . exp )
+    (30) exp -> ( . exp )
     (17) exp -> . exp PLUS exp
     (18) exp -> . exp MINUS exp
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
-    exp                            shift and go to state 33
+    exp                            shift and go to state 45
     var                            shift and go to state 20
 
 state 20
 
-    (23) exp -> var .
+    (31) exp -> var .
 
-    ,               reduce using rule 23 (exp -> var .)
-    PLUS            reduce using rule 23 (exp -> var .)
-    MINUS           reduce using rule 23 (exp -> var .)
-    TIMES           reduce using rule 23 (exp -> var .)
-    DIVIDE          reduce using rule 23 (exp -> var .)
-    INTEGER_DIVIDE  reduce using rule 23 (exp -> var .)
-    ;               reduce using rule 23 (exp -> var .)
-    DO              reduce using rule 23 (exp -> var .)
-    RETURN          reduce using rule 23 (exp -> var .)
-    IDENTIFIER      reduce using rule 23 (exp -> var .)
-    $end            reduce using rule 23 (exp -> var .)
-    END             reduce using rule 23 (exp -> var .)
-    )               reduce using rule 23 (exp -> var .)
+    ,               reduce using rule 31 (exp -> var .)
+    PLUS            reduce using rule 31 (exp -> var .)
+    MINUS           reduce using rule 31 (exp -> var .)
+    TIMES           reduce using rule 31 (exp -> var .)
+    DIVIDE          reduce using rule 31 (exp -> var .)
+    INTEGER_DIVIDE  reduce using rule 31 (exp -> var .)
+    LT              reduce using rule 31 (exp -> var .)
+    GT              reduce using rule 31 (exp -> var .)
+    LTE             reduce using rule 31 (exp -> var .)
+    GTE             reduce using rule 31 (exp -> var .)
+    EQUALS          reduce using rule 31 (exp -> var .)
+    NE              reduce using rule 31 (exp -> var .)
+    AND             reduce using rule 31 (exp -> var .)
+    OR              reduce using rule 31 (exp -> var .)
+    ;               reduce using rule 31 (exp -> var .)
+    DO              reduce using rule 31 (exp -> var .)
+    RETURN          reduce using rule 31 (exp -> var .)
+    IDENTIFIER      reduce using rule 31 (exp -> var .)
+    $end            reduce using rule 31 (exp -> var .)
+    END             reduce using rule 31 (exp -> var .)
+    )               reduce using rule 31 (exp -> var .)
 
 
 state 21
 
-    (24) exp -> NUMBER .
+    (32) exp -> NUMBER .
 
-    ,               reduce using rule 24 (exp -> NUMBER .)
-    PLUS            reduce using rule 24 (exp -> NUMBER .)
-    MINUS           reduce using rule 24 (exp -> NUMBER .)
-    TIMES           reduce using rule 24 (exp -> NUMBER .)
-    DIVIDE          reduce using rule 24 (exp -> NUMBER .)
-    INTEGER_DIVIDE  reduce using rule 24 (exp -> NUMBER .)
-    ;               reduce using rule 24 (exp -> NUMBER .)
-    DO              reduce using rule 24 (exp -> NUMBER .)
-    RETURN          reduce using rule 24 (exp -> NUMBER .)
-    IDENTIFIER      reduce using rule 24 (exp -> NUMBER .)
-    $end            reduce using rule 24 (exp -> NUMBER .)
-    END             reduce using rule 24 (exp -> NUMBER .)
-    )               reduce using rule 24 (exp -> NUMBER .)
+    ,               reduce using rule 32 (exp -> NUMBER .)
+    PLUS            reduce using rule 32 (exp -> NUMBER .)
+    MINUS           reduce using rule 32 (exp -> NUMBER .)
+    TIMES           reduce using rule 32 (exp -> NUMBER .)
+    DIVIDE          reduce using rule 32 (exp -> NUMBER .)
+    INTEGER_DIVIDE  reduce using rule 32 (exp -> NUMBER .)
+    LT              reduce using rule 32 (exp -> NUMBER .)
+    GT              reduce using rule 32 (exp -> NUMBER .)
+    LTE             reduce using rule 32 (exp -> NUMBER .)
+    GTE             reduce using rule 32 (exp -> NUMBER .)
+    EQUALS          reduce using rule 32 (exp -> NUMBER .)
+    NE              reduce using rule 32 (exp -> NUMBER .)
+    AND             reduce using rule 32 (exp -> NUMBER .)
+    OR              reduce using rule 32 (exp -> NUMBER .)
+    ;               reduce using rule 32 (exp -> NUMBER .)
+    DO              reduce using rule 32 (exp -> NUMBER .)
+    RETURN          reduce using rule 32 (exp -> NUMBER .)
+    IDENTIFIER      reduce using rule 32 (exp -> NUMBER .)
+    $end            reduce using rule 32 (exp -> NUMBER .)
+    END             reduce using rule 32 (exp -> NUMBER .)
+    )               reduce using rule 32 (exp -> NUMBER .)
 
 
 state 22
+
+    (34) exp -> NOT . exp
+    (17) exp -> . exp PLUS exp
+    (18) exp -> . exp MINUS exp
+    (19) exp -> . exp TIMES exp
+    (20) exp -> . exp DIVIDE exp
+    (21) exp -> . exp INTEGER_DIVIDE exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
+    (14) var -> . IDENTIFIER
+
+    (               shift and go to state 19
+    NUMBER          shift and go to state 21
+    MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
+    IDENTIFIER      shift and go to state 11
+
+    exp                            shift and go to state 46
+    var                            shift and go to state 20
+
+state 23
+
+    (35) exp -> FALSE .
+
+    ,               reduce using rule 35 (exp -> FALSE .)
+    PLUS            reduce using rule 35 (exp -> FALSE .)
+    MINUS           reduce using rule 35 (exp -> FALSE .)
+    TIMES           reduce using rule 35 (exp -> FALSE .)
+    DIVIDE          reduce using rule 35 (exp -> FALSE .)
+    INTEGER_DIVIDE  reduce using rule 35 (exp -> FALSE .)
+    LT              reduce using rule 35 (exp -> FALSE .)
+    GT              reduce using rule 35 (exp -> FALSE .)
+    LTE             reduce using rule 35 (exp -> FALSE .)
+    GTE             reduce using rule 35 (exp -> FALSE .)
+    EQUALS          reduce using rule 35 (exp -> FALSE .)
+    NE              reduce using rule 35 (exp -> FALSE .)
+    AND             reduce using rule 35 (exp -> FALSE .)
+    OR              reduce using rule 35 (exp -> FALSE .)
+    ;               reduce using rule 35 (exp -> FALSE .)
+    DO              reduce using rule 35 (exp -> FALSE .)
+    RETURN          reduce using rule 35 (exp -> FALSE .)
+    IDENTIFIER      reduce using rule 35 (exp -> FALSE .)
+    $end            reduce using rule 35 (exp -> FALSE .)
+    END             reduce using rule 35 (exp -> FALSE .)
+    )               reduce using rule 35 (exp -> FALSE .)
+
+
+state 24
+
+    (36) exp -> TRUE .
+
+    ,               reduce using rule 36 (exp -> TRUE .)
+    PLUS            reduce using rule 36 (exp -> TRUE .)
+    MINUS           reduce using rule 36 (exp -> TRUE .)
+    TIMES           reduce using rule 36 (exp -> TRUE .)
+    DIVIDE          reduce using rule 36 (exp -> TRUE .)
+    INTEGER_DIVIDE  reduce using rule 36 (exp -> TRUE .)
+    LT              reduce using rule 36 (exp -> TRUE .)
+    GT              reduce using rule 36 (exp -> TRUE .)
+    LTE             reduce using rule 36 (exp -> TRUE .)
+    GTE             reduce using rule 36 (exp -> TRUE .)
+    EQUALS          reduce using rule 36 (exp -> TRUE .)
+    NE              reduce using rule 36 (exp -> TRUE .)
+    AND             reduce using rule 36 (exp -> TRUE .)
+    OR              reduce using rule 36 (exp -> TRUE .)
+    ;               reduce using rule 36 (exp -> TRUE .)
+    DO              reduce using rule 36 (exp -> TRUE .)
+    RETURN          reduce using rule 36 (exp -> TRUE .)
+    IDENTIFIER      reduce using rule 36 (exp -> TRUE .)
+    $end            reduce using rule 36 (exp -> TRUE .)
+    END             reduce using rule 36 (exp -> TRUE .)
+    )               reduce using rule 36 (exp -> TRUE .)
+
+
+state 25
+
+    (37) exp -> NIL .
+
+    ,               reduce using rule 37 (exp -> NIL .)
+    PLUS            reduce using rule 37 (exp -> NIL .)
+    MINUS           reduce using rule 37 (exp -> NIL .)
+    TIMES           reduce using rule 37 (exp -> NIL .)
+    DIVIDE          reduce using rule 37 (exp -> NIL .)
+    INTEGER_DIVIDE  reduce using rule 37 (exp -> NIL .)
+    LT              reduce using rule 37 (exp -> NIL .)
+    GT              reduce using rule 37 (exp -> NIL .)
+    LTE             reduce using rule 37 (exp -> NIL .)
+    GTE             reduce using rule 37 (exp -> NIL .)
+    EQUALS          reduce using rule 37 (exp -> NIL .)
+    NE              reduce using rule 37 (exp -> NIL .)
+    AND             reduce using rule 37 (exp -> NIL .)
+    OR              reduce using rule 37 (exp -> NIL .)
+    ;               reduce using rule 37 (exp -> NIL .)
+    DO              reduce using rule 37 (exp -> NIL .)
+    RETURN          reduce using rule 37 (exp -> NIL .)
+    IDENTIFIER      reduce using rule 37 (exp -> NIL .)
+    $end            reduce using rule 37 (exp -> NIL .)
+    END             reduce using rule 37 (exp -> NIL .)
+    )               reduce using rule 37 (exp -> NIL .)
+
+
+state 26
 
     (13) varlist -> var , . varlist
     (12) varlist -> . var
@@ -456,9 +703,9 @@ state 22
     IDENTIFIER      shift and go to state 11
 
     var                            shift and go to state 10
-    varlist                        shift and go to state 34
+    varlist                        shift and go to state 47
 
-state 23
+state 27
 
     (6) stat -> DO block END .
 
@@ -470,7 +717,7 @@ state 23
     END             reduce using rule 6 (stat -> DO block END .)
 
 
-state 24
+state 28
 
     (7) stat -> varlist = explist .
 
@@ -482,7 +729,7 @@ state 24
     END             reduce using rule 7 (stat -> varlist = explist .)
 
 
-state 25
+state 29
 
     (11) stat -> RETURN explist ; .
 
@@ -494,7 +741,7 @@ state 25
     END             reduce using rule 11 (stat -> RETURN explist ; .)
 
 
-state 26
+state 30
 
     (16) explist -> exp , . explist
     (15) explist -> . exp
@@ -504,22 +751,38 @@ state 26
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
     exp                            shift and go to state 17
-    explist                        shift and go to state 35
+    explist                        shift and go to state 48
     var                            shift and go to state 20
 
-state 27
+state 31
 
     (17) exp -> exp PLUS . exp
     (17) exp -> . exp PLUS exp
@@ -527,21 +790,37 @@ state 27
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
-    exp                            shift and go to state 36
+    exp                            shift and go to state 49
     var                            shift and go to state 20
 
-state 28
+state 32
 
     (18) exp -> exp MINUS . exp
     (17) exp -> . exp PLUS exp
@@ -549,21 +828,37 @@ state 28
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
-    exp                            shift and go to state 37
+    exp                            shift and go to state 50
     var                            shift and go to state 20
 
-state 29
+state 33
 
     (19) exp -> exp TIMES . exp
     (17) exp -> . exp PLUS exp
@@ -571,21 +866,37 @@ state 29
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
-    exp                            shift and go to state 38
+    exp                            shift and go to state 51
     var                            shift and go to state 20
 
-state 30
+state 34
 
     (20) exp -> exp DIVIDE . exp
     (17) exp -> . exp PLUS exp
@@ -593,21 +904,37 @@ state 30
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
-    exp                            shift and go to state 39
+    exp                            shift and go to state 52
     var                            shift and go to state 20
 
-state 31
+state 35
 
     (21) exp -> exp INTEGER_DIVIDE . exp
     (17) exp -> . exp PLUS exp
@@ -615,75 +942,489 @@ state 31
     (19) exp -> . exp TIMES exp
     (20) exp -> . exp DIVIDE exp
     (21) exp -> . exp INTEGER_DIVIDE exp
-    (22) exp -> . ( exp )
-    (23) exp -> . var
-    (24) exp -> . NUMBER
-    (25) exp -> . MINUS exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
     (14) var -> . IDENTIFIER
 
     (               shift and go to state 19
     NUMBER          shift and go to state 21
     MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
     IDENTIFIER      shift and go to state 11
 
-    exp                            shift and go to state 40
+    exp                            shift and go to state 53
     var                            shift and go to state 20
 
-state 32
+state 36
 
-    (25) exp -> MINUS exp .
+    (22) exp -> exp LT . exp
+    (17) exp -> . exp PLUS exp
+    (18) exp -> . exp MINUS exp
+    (19) exp -> . exp TIMES exp
+    (20) exp -> . exp DIVIDE exp
+    (21) exp -> . exp INTEGER_DIVIDE exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
+    (14) var -> . IDENTIFIER
+
+    (               shift and go to state 19
+    NUMBER          shift and go to state 21
+    MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
+    IDENTIFIER      shift and go to state 11
+
+    exp                            shift and go to state 54
+    var                            shift and go to state 20
+
+state 37
+
+    (23) exp -> exp GT . exp
+    (17) exp -> . exp PLUS exp
+    (18) exp -> . exp MINUS exp
+    (19) exp -> . exp TIMES exp
+    (20) exp -> . exp DIVIDE exp
+    (21) exp -> . exp INTEGER_DIVIDE exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
+    (14) var -> . IDENTIFIER
+
+    (               shift and go to state 19
+    NUMBER          shift and go to state 21
+    MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
+    IDENTIFIER      shift and go to state 11
+
+    exp                            shift and go to state 55
+    var                            shift and go to state 20
+
+state 38
+
+    (24) exp -> exp LTE . exp
+    (17) exp -> . exp PLUS exp
+    (18) exp -> . exp MINUS exp
+    (19) exp -> . exp TIMES exp
+    (20) exp -> . exp DIVIDE exp
+    (21) exp -> . exp INTEGER_DIVIDE exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
+    (14) var -> . IDENTIFIER
+
+    (               shift and go to state 19
+    NUMBER          shift and go to state 21
+    MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
+    IDENTIFIER      shift and go to state 11
+
+    exp                            shift and go to state 56
+    var                            shift and go to state 20
+
+state 39
+
+    (25) exp -> exp GTE . exp
+    (17) exp -> . exp PLUS exp
+    (18) exp -> . exp MINUS exp
+    (19) exp -> . exp TIMES exp
+    (20) exp -> . exp DIVIDE exp
+    (21) exp -> . exp INTEGER_DIVIDE exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
+    (14) var -> . IDENTIFIER
+
+    (               shift and go to state 19
+    NUMBER          shift and go to state 21
+    MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
+    IDENTIFIER      shift and go to state 11
+
+    exp                            shift and go to state 57
+    var                            shift and go to state 20
+
+state 40
+
+    (26) exp -> exp EQUALS . exp
+    (17) exp -> . exp PLUS exp
+    (18) exp -> . exp MINUS exp
+    (19) exp -> . exp TIMES exp
+    (20) exp -> . exp DIVIDE exp
+    (21) exp -> . exp INTEGER_DIVIDE exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
+    (14) var -> . IDENTIFIER
+
+    (               shift and go to state 19
+    NUMBER          shift and go to state 21
+    MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
+    IDENTIFIER      shift and go to state 11
+
+    exp                            shift and go to state 58
+    var                            shift and go to state 20
+
+state 41
+
+    (27) exp -> exp NE . exp
+    (17) exp -> . exp PLUS exp
+    (18) exp -> . exp MINUS exp
+    (19) exp -> . exp TIMES exp
+    (20) exp -> . exp DIVIDE exp
+    (21) exp -> . exp INTEGER_DIVIDE exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
+    (14) var -> . IDENTIFIER
+
+    (               shift and go to state 19
+    NUMBER          shift and go to state 21
+    MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
+    IDENTIFIER      shift and go to state 11
+
+    exp                            shift and go to state 59
+    var                            shift and go to state 20
+
+state 42
+
+    (28) exp -> exp AND . exp
+    (17) exp -> . exp PLUS exp
+    (18) exp -> . exp MINUS exp
+    (19) exp -> . exp TIMES exp
+    (20) exp -> . exp DIVIDE exp
+    (21) exp -> . exp INTEGER_DIVIDE exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
+    (14) var -> . IDENTIFIER
+
+    (               shift and go to state 19
+    NUMBER          shift and go to state 21
+    MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
+    IDENTIFIER      shift and go to state 11
+
+    exp                            shift and go to state 60
+    var                            shift and go to state 20
+
+state 43
+
+    (29) exp -> exp OR . exp
+    (17) exp -> . exp PLUS exp
+    (18) exp -> . exp MINUS exp
+    (19) exp -> . exp TIMES exp
+    (20) exp -> . exp DIVIDE exp
+    (21) exp -> . exp INTEGER_DIVIDE exp
+    (22) exp -> . exp LT exp
+    (23) exp -> . exp GT exp
+    (24) exp -> . exp LTE exp
+    (25) exp -> . exp GTE exp
+    (26) exp -> . exp EQUALS exp
+    (27) exp -> . exp NE exp
+    (28) exp -> . exp AND exp
+    (29) exp -> . exp OR exp
+    (30) exp -> . ( exp )
+    (31) exp -> . var
+    (32) exp -> . NUMBER
+    (33) exp -> . MINUS exp
+    (34) exp -> . NOT exp
+    (35) exp -> . FALSE
+    (36) exp -> . TRUE
+    (37) exp -> . NIL
+    (14) var -> . IDENTIFIER
+
+    (               shift and go to state 19
+    NUMBER          shift and go to state 21
+    MINUS           shift and go to state 18
+    NOT             shift and go to state 22
+    FALSE           shift and go to state 23
+    TRUE            shift and go to state 24
+    NIL             shift and go to state 25
+    IDENTIFIER      shift and go to state 11
+
+    exp                            shift and go to state 61
+    var                            shift and go to state 20
+
+state 44
+
+    (33) exp -> MINUS exp .
     (17) exp -> exp . PLUS exp
     (18) exp -> exp . MINUS exp
     (19) exp -> exp . TIMES exp
     (20) exp -> exp . DIVIDE exp
     (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
 
-    ,               reduce using rule 25 (exp -> MINUS exp .)
-    PLUS            reduce using rule 25 (exp -> MINUS exp .)
-    MINUS           reduce using rule 25 (exp -> MINUS exp .)
-    TIMES           reduce using rule 25 (exp -> MINUS exp .)
-    DIVIDE          reduce using rule 25 (exp -> MINUS exp .)
-    INTEGER_DIVIDE  reduce using rule 25 (exp -> MINUS exp .)
-    ;               reduce using rule 25 (exp -> MINUS exp .)
-    DO              reduce using rule 25 (exp -> MINUS exp .)
-    RETURN          reduce using rule 25 (exp -> MINUS exp .)
-    IDENTIFIER      reduce using rule 25 (exp -> MINUS exp .)
-    $end            reduce using rule 25 (exp -> MINUS exp .)
-    END             reduce using rule 25 (exp -> MINUS exp .)
-    )               reduce using rule 25 (exp -> MINUS exp .)
+    ,               reduce using rule 33 (exp -> MINUS exp .)
+    PLUS            reduce using rule 33 (exp -> MINUS exp .)
+    MINUS           reduce using rule 33 (exp -> MINUS exp .)
+    TIMES           reduce using rule 33 (exp -> MINUS exp .)
+    DIVIDE          reduce using rule 33 (exp -> MINUS exp .)
+    INTEGER_DIVIDE  reduce using rule 33 (exp -> MINUS exp .)
+    LT              reduce using rule 33 (exp -> MINUS exp .)
+    GT              reduce using rule 33 (exp -> MINUS exp .)
+    LTE             reduce using rule 33 (exp -> MINUS exp .)
+    GTE             reduce using rule 33 (exp -> MINUS exp .)
+    EQUALS          reduce using rule 33 (exp -> MINUS exp .)
+    NE              reduce using rule 33 (exp -> MINUS exp .)
+    AND             reduce using rule 33 (exp -> MINUS exp .)
+    OR              reduce using rule 33 (exp -> MINUS exp .)
+    ;               reduce using rule 33 (exp -> MINUS exp .)
+    DO              reduce using rule 33 (exp -> MINUS exp .)
+    RETURN          reduce using rule 33 (exp -> MINUS exp .)
+    IDENTIFIER      reduce using rule 33 (exp -> MINUS exp .)
+    $end            reduce using rule 33 (exp -> MINUS exp .)
+    END             reduce using rule 33 (exp -> MINUS exp .)
+    )               reduce using rule 33 (exp -> MINUS exp .)
 
-  ! PLUS            [ shift and go to state 27 ]
-  ! MINUS           [ shift and go to state 28 ]
-  ! TIMES           [ shift and go to state 29 ]
-  ! DIVIDE          [ shift and go to state 30 ]
-  ! INTEGER_DIVIDE  [ shift and go to state 31 ]
+  ! PLUS            [ shift and go to state 31 ]
+  ! MINUS           [ shift and go to state 32 ]
+  ! TIMES           [ shift and go to state 33 ]
+  ! DIVIDE          [ shift and go to state 34 ]
+  ! INTEGER_DIVIDE  [ shift and go to state 35 ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
 
 
-state 33
+state 45
 
-    (22) exp -> ( exp . )
+    (30) exp -> ( exp . )
     (17) exp -> exp . PLUS exp
     (18) exp -> exp . MINUS exp
     (19) exp -> exp . TIMES exp
     (20) exp -> exp . DIVIDE exp
     (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
 
-    )               shift and go to state 41
-    PLUS            shift and go to state 27
-    MINUS           shift and go to state 28
-    TIMES           shift and go to state 29
-    DIVIDE          shift and go to state 30
-    INTEGER_DIVIDE  shift and go to state 31
+    )               shift and go to state 62
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+    LT              shift and go to state 36
+    GT              shift and go to state 37
+    LTE             shift and go to state 38
+    GTE             shift and go to state 39
+    EQUALS          shift and go to state 40
+    NE              shift and go to state 41
+    AND             shift and go to state 42
+    OR              shift and go to state 43
 
 
-state 34
+state 46
+
+    (34) exp -> NOT exp .
+    (17) exp -> exp . PLUS exp
+    (18) exp -> exp . MINUS exp
+    (19) exp -> exp . TIMES exp
+    (20) exp -> exp . DIVIDE exp
+    (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
+
+    ,               reduce using rule 34 (exp -> NOT exp .)
+    PLUS            reduce using rule 34 (exp -> NOT exp .)
+    MINUS           reduce using rule 34 (exp -> NOT exp .)
+    TIMES           reduce using rule 34 (exp -> NOT exp .)
+    DIVIDE          reduce using rule 34 (exp -> NOT exp .)
+    INTEGER_DIVIDE  reduce using rule 34 (exp -> NOT exp .)
+    LT              reduce using rule 34 (exp -> NOT exp .)
+    GT              reduce using rule 34 (exp -> NOT exp .)
+    LTE             reduce using rule 34 (exp -> NOT exp .)
+    GTE             reduce using rule 34 (exp -> NOT exp .)
+    EQUALS          reduce using rule 34 (exp -> NOT exp .)
+    NE              reduce using rule 34 (exp -> NOT exp .)
+    AND             reduce using rule 34 (exp -> NOT exp .)
+    OR              reduce using rule 34 (exp -> NOT exp .)
+    ;               reduce using rule 34 (exp -> NOT exp .)
+    DO              reduce using rule 34 (exp -> NOT exp .)
+    RETURN          reduce using rule 34 (exp -> NOT exp .)
+    IDENTIFIER      reduce using rule 34 (exp -> NOT exp .)
+    $end            reduce using rule 34 (exp -> NOT exp .)
+    END             reduce using rule 34 (exp -> NOT exp .)
+    )               reduce using rule 34 (exp -> NOT exp .)
+
+  ! PLUS            [ shift and go to state 31 ]
+  ! MINUS           [ shift and go to state 32 ]
+  ! TIMES           [ shift and go to state 33 ]
+  ! DIVIDE          [ shift and go to state 34 ]
+  ! INTEGER_DIVIDE  [ shift and go to state 35 ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
+
+
+state 47
 
     (13) varlist -> var , varlist .
 
     =               reduce using rule 13 (varlist -> var , varlist .)
 
 
-state 35
+state 48
 
     (16) explist -> exp , explist .
 
@@ -695,7 +1436,7 @@ state 35
     END             reduce using rule 16 (explist -> exp , explist .)
 
 
-state 36
+state 49
 
     (17) exp -> exp PLUS exp .
     (17) exp -> exp . PLUS exp
@@ -703,10 +1444,26 @@ state 36
     (19) exp -> exp . TIMES exp
     (20) exp -> exp . DIVIDE exp
     (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
 
     ,               reduce using rule 17 (exp -> exp PLUS exp .)
     PLUS            reduce using rule 17 (exp -> exp PLUS exp .)
     MINUS           reduce using rule 17 (exp -> exp PLUS exp .)
+    LT              reduce using rule 17 (exp -> exp PLUS exp .)
+    GT              reduce using rule 17 (exp -> exp PLUS exp .)
+    LTE             reduce using rule 17 (exp -> exp PLUS exp .)
+    GTE             reduce using rule 17 (exp -> exp PLUS exp .)
+    EQUALS          reduce using rule 17 (exp -> exp PLUS exp .)
+    NE              reduce using rule 17 (exp -> exp PLUS exp .)
+    AND             reduce using rule 17 (exp -> exp PLUS exp .)
+    OR              reduce using rule 17 (exp -> exp PLUS exp .)
     ;               reduce using rule 17 (exp -> exp PLUS exp .)
     DO              reduce using rule 17 (exp -> exp PLUS exp .)
     RETURN          reduce using rule 17 (exp -> exp PLUS exp .)
@@ -714,18 +1471,26 @@ state 36
     $end            reduce using rule 17 (exp -> exp PLUS exp .)
     END             reduce using rule 17 (exp -> exp PLUS exp .)
     )               reduce using rule 17 (exp -> exp PLUS exp .)
-    TIMES           shift and go to state 29
-    DIVIDE          shift and go to state 30
-    INTEGER_DIVIDE  shift and go to state 31
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
 
   ! TIMES           [ reduce using rule 17 (exp -> exp PLUS exp .) ]
   ! DIVIDE          [ reduce using rule 17 (exp -> exp PLUS exp .) ]
   ! INTEGER_DIVIDE  [ reduce using rule 17 (exp -> exp PLUS exp .) ]
-  ! PLUS            [ shift and go to state 27 ]
-  ! MINUS           [ shift and go to state 28 ]
+  ! PLUS            [ shift and go to state 31 ]
+  ! MINUS           [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
 
 
-state 37
+state 50
 
     (18) exp -> exp MINUS exp .
     (17) exp -> exp . PLUS exp
@@ -733,10 +1498,26 @@ state 37
     (19) exp -> exp . TIMES exp
     (20) exp -> exp . DIVIDE exp
     (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
 
     ,               reduce using rule 18 (exp -> exp MINUS exp .)
     PLUS            reduce using rule 18 (exp -> exp MINUS exp .)
     MINUS           reduce using rule 18 (exp -> exp MINUS exp .)
+    LT              reduce using rule 18 (exp -> exp MINUS exp .)
+    GT              reduce using rule 18 (exp -> exp MINUS exp .)
+    LTE             reduce using rule 18 (exp -> exp MINUS exp .)
+    GTE             reduce using rule 18 (exp -> exp MINUS exp .)
+    EQUALS          reduce using rule 18 (exp -> exp MINUS exp .)
+    NE              reduce using rule 18 (exp -> exp MINUS exp .)
+    AND             reduce using rule 18 (exp -> exp MINUS exp .)
+    OR              reduce using rule 18 (exp -> exp MINUS exp .)
     ;               reduce using rule 18 (exp -> exp MINUS exp .)
     DO              reduce using rule 18 (exp -> exp MINUS exp .)
     RETURN          reduce using rule 18 (exp -> exp MINUS exp .)
@@ -744,18 +1525,26 @@ state 37
     $end            reduce using rule 18 (exp -> exp MINUS exp .)
     END             reduce using rule 18 (exp -> exp MINUS exp .)
     )               reduce using rule 18 (exp -> exp MINUS exp .)
-    TIMES           shift and go to state 29
-    DIVIDE          shift and go to state 30
-    INTEGER_DIVIDE  shift and go to state 31
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
 
   ! TIMES           [ reduce using rule 18 (exp -> exp MINUS exp .) ]
   ! DIVIDE          [ reduce using rule 18 (exp -> exp MINUS exp .) ]
   ! INTEGER_DIVIDE  [ reduce using rule 18 (exp -> exp MINUS exp .) ]
-  ! PLUS            [ shift and go to state 27 ]
-  ! MINUS           [ shift and go to state 28 ]
+  ! PLUS            [ shift and go to state 31 ]
+  ! MINUS           [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
 
 
-state 38
+state 51
 
     (19) exp -> exp TIMES exp .
     (17) exp -> exp . PLUS exp
@@ -763,6 +1552,14 @@ state 38
     (19) exp -> exp . TIMES exp
     (20) exp -> exp . DIVIDE exp
     (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
 
     ,               reduce using rule 19 (exp -> exp TIMES exp .)
     PLUS            reduce using rule 19 (exp -> exp TIMES exp .)
@@ -770,6 +1567,14 @@ state 38
     TIMES           reduce using rule 19 (exp -> exp TIMES exp .)
     DIVIDE          reduce using rule 19 (exp -> exp TIMES exp .)
     INTEGER_DIVIDE  reduce using rule 19 (exp -> exp TIMES exp .)
+    LT              reduce using rule 19 (exp -> exp TIMES exp .)
+    GT              reduce using rule 19 (exp -> exp TIMES exp .)
+    LTE             reduce using rule 19 (exp -> exp TIMES exp .)
+    GTE             reduce using rule 19 (exp -> exp TIMES exp .)
+    EQUALS          reduce using rule 19 (exp -> exp TIMES exp .)
+    NE              reduce using rule 19 (exp -> exp TIMES exp .)
+    AND             reduce using rule 19 (exp -> exp TIMES exp .)
+    OR              reduce using rule 19 (exp -> exp TIMES exp .)
     ;               reduce using rule 19 (exp -> exp TIMES exp .)
     DO              reduce using rule 19 (exp -> exp TIMES exp .)
     RETURN          reduce using rule 19 (exp -> exp TIMES exp .)
@@ -778,14 +1583,22 @@ state 38
     END             reduce using rule 19 (exp -> exp TIMES exp .)
     )               reduce using rule 19 (exp -> exp TIMES exp .)
 
-  ! PLUS            [ shift and go to state 27 ]
-  ! MINUS           [ shift and go to state 28 ]
-  ! TIMES           [ shift and go to state 29 ]
-  ! DIVIDE          [ shift and go to state 30 ]
-  ! INTEGER_DIVIDE  [ shift and go to state 31 ]
+  ! PLUS            [ shift and go to state 31 ]
+  ! MINUS           [ shift and go to state 32 ]
+  ! TIMES           [ shift and go to state 33 ]
+  ! DIVIDE          [ shift and go to state 34 ]
+  ! INTEGER_DIVIDE  [ shift and go to state 35 ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
 
 
-state 39
+state 52
 
     (20) exp -> exp DIVIDE exp .
     (17) exp -> exp . PLUS exp
@@ -793,6 +1606,14 @@ state 39
     (19) exp -> exp . TIMES exp
     (20) exp -> exp . DIVIDE exp
     (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
 
     ,               reduce using rule 20 (exp -> exp DIVIDE exp .)
     PLUS            reduce using rule 20 (exp -> exp DIVIDE exp .)
@@ -800,6 +1621,14 @@ state 39
     TIMES           reduce using rule 20 (exp -> exp DIVIDE exp .)
     DIVIDE          reduce using rule 20 (exp -> exp DIVIDE exp .)
     INTEGER_DIVIDE  reduce using rule 20 (exp -> exp DIVIDE exp .)
+    LT              reduce using rule 20 (exp -> exp DIVIDE exp .)
+    GT              reduce using rule 20 (exp -> exp DIVIDE exp .)
+    LTE             reduce using rule 20 (exp -> exp DIVIDE exp .)
+    GTE             reduce using rule 20 (exp -> exp DIVIDE exp .)
+    EQUALS          reduce using rule 20 (exp -> exp DIVIDE exp .)
+    NE              reduce using rule 20 (exp -> exp DIVIDE exp .)
+    AND             reduce using rule 20 (exp -> exp DIVIDE exp .)
+    OR              reduce using rule 20 (exp -> exp DIVIDE exp .)
     ;               reduce using rule 20 (exp -> exp DIVIDE exp .)
     DO              reduce using rule 20 (exp -> exp DIVIDE exp .)
     RETURN          reduce using rule 20 (exp -> exp DIVIDE exp .)
@@ -808,14 +1637,22 @@ state 39
     END             reduce using rule 20 (exp -> exp DIVIDE exp .)
     )               reduce using rule 20 (exp -> exp DIVIDE exp .)
 
-  ! PLUS            [ shift and go to state 27 ]
-  ! MINUS           [ shift and go to state 28 ]
-  ! TIMES           [ shift and go to state 29 ]
-  ! DIVIDE          [ shift and go to state 30 ]
-  ! INTEGER_DIVIDE  [ shift and go to state 31 ]
+  ! PLUS            [ shift and go to state 31 ]
+  ! MINUS           [ shift and go to state 32 ]
+  ! TIMES           [ shift and go to state 33 ]
+  ! DIVIDE          [ shift and go to state 34 ]
+  ! INTEGER_DIVIDE  [ shift and go to state 35 ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
 
 
-state 40
+state 53
 
     (21) exp -> exp INTEGER_DIVIDE exp .
     (17) exp -> exp . PLUS exp
@@ -823,6 +1660,14 @@ state 40
     (19) exp -> exp . TIMES exp
     (20) exp -> exp . DIVIDE exp
     (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
 
     ,               reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
     PLUS            reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
@@ -830,6 +1675,14 @@ state 40
     TIMES           reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
     DIVIDE          reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
     INTEGER_DIVIDE  reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
+    LT              reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
+    GT              reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
+    LTE             reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
+    GTE             reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
+    EQUALS          reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
+    NE              reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
+    AND             reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
+    OR              reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
     ;               reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
     DO              reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
     RETURN          reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
@@ -838,30 +1691,478 @@ state 40
     END             reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
     )               reduce using rule 21 (exp -> exp INTEGER_DIVIDE exp .)
 
-  ! PLUS            [ shift and go to state 27 ]
-  ! MINUS           [ shift and go to state 28 ]
-  ! TIMES           [ shift and go to state 29 ]
-  ! DIVIDE          [ shift and go to state 30 ]
-  ! INTEGER_DIVIDE  [ shift and go to state 31 ]
+  ! PLUS            [ shift and go to state 31 ]
+  ! MINUS           [ shift and go to state 32 ]
+  ! TIMES           [ shift and go to state 33 ]
+  ! DIVIDE          [ shift and go to state 34 ]
+  ! INTEGER_DIVIDE  [ shift and go to state 35 ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
 
 
-state 41
+state 54
 
-    (22) exp -> ( exp ) .
+    (22) exp -> exp LT exp .
+    (17) exp -> exp . PLUS exp
+    (18) exp -> exp . MINUS exp
+    (19) exp -> exp . TIMES exp
+    (20) exp -> exp . DIVIDE exp
+    (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
 
-    ,               reduce using rule 22 (exp -> ( exp ) .)
-    PLUS            reduce using rule 22 (exp -> ( exp ) .)
-    MINUS           reduce using rule 22 (exp -> ( exp ) .)
-    TIMES           reduce using rule 22 (exp -> ( exp ) .)
-    DIVIDE          reduce using rule 22 (exp -> ( exp ) .)
-    INTEGER_DIVIDE  reduce using rule 22 (exp -> ( exp ) .)
-    ;               reduce using rule 22 (exp -> ( exp ) .)
-    DO              reduce using rule 22 (exp -> ( exp ) .)
-    RETURN          reduce using rule 22 (exp -> ( exp ) .)
-    IDENTIFIER      reduce using rule 22 (exp -> ( exp ) .)
-    $end            reduce using rule 22 (exp -> ( exp ) .)
-    END             reduce using rule 22 (exp -> ( exp ) .)
-    )               reduce using rule 22 (exp -> ( exp ) .)
+    ,               reduce using rule 22 (exp -> exp LT exp .)
+    LT              reduce using rule 22 (exp -> exp LT exp .)
+    GT              reduce using rule 22 (exp -> exp LT exp .)
+    LTE             reduce using rule 22 (exp -> exp LT exp .)
+    GTE             reduce using rule 22 (exp -> exp LT exp .)
+    EQUALS          reduce using rule 22 (exp -> exp LT exp .)
+    NE              reduce using rule 22 (exp -> exp LT exp .)
+    AND             reduce using rule 22 (exp -> exp LT exp .)
+    OR              reduce using rule 22 (exp -> exp LT exp .)
+    ;               reduce using rule 22 (exp -> exp LT exp .)
+    DO              reduce using rule 22 (exp -> exp LT exp .)
+    RETURN          reduce using rule 22 (exp -> exp LT exp .)
+    IDENTIFIER      reduce using rule 22 (exp -> exp LT exp .)
+    $end            reduce using rule 22 (exp -> exp LT exp .)
+    END             reduce using rule 22 (exp -> exp LT exp .)
+    )               reduce using rule 22 (exp -> exp LT exp .)
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+
+  ! PLUS            [ reduce using rule 22 (exp -> exp LT exp .) ]
+  ! MINUS           [ reduce using rule 22 (exp -> exp LT exp .) ]
+  ! TIMES           [ reduce using rule 22 (exp -> exp LT exp .) ]
+  ! DIVIDE          [ reduce using rule 22 (exp -> exp LT exp .) ]
+  ! INTEGER_DIVIDE  [ reduce using rule 22 (exp -> exp LT exp .) ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
+
+
+state 55
+
+    (23) exp -> exp GT exp .
+    (17) exp -> exp . PLUS exp
+    (18) exp -> exp . MINUS exp
+    (19) exp -> exp . TIMES exp
+    (20) exp -> exp . DIVIDE exp
+    (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
+
+    ,               reduce using rule 23 (exp -> exp GT exp .)
+    LT              reduce using rule 23 (exp -> exp GT exp .)
+    GT              reduce using rule 23 (exp -> exp GT exp .)
+    LTE             reduce using rule 23 (exp -> exp GT exp .)
+    GTE             reduce using rule 23 (exp -> exp GT exp .)
+    EQUALS          reduce using rule 23 (exp -> exp GT exp .)
+    NE              reduce using rule 23 (exp -> exp GT exp .)
+    AND             reduce using rule 23 (exp -> exp GT exp .)
+    OR              reduce using rule 23 (exp -> exp GT exp .)
+    ;               reduce using rule 23 (exp -> exp GT exp .)
+    DO              reduce using rule 23 (exp -> exp GT exp .)
+    RETURN          reduce using rule 23 (exp -> exp GT exp .)
+    IDENTIFIER      reduce using rule 23 (exp -> exp GT exp .)
+    $end            reduce using rule 23 (exp -> exp GT exp .)
+    END             reduce using rule 23 (exp -> exp GT exp .)
+    )               reduce using rule 23 (exp -> exp GT exp .)
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+
+  ! PLUS            [ reduce using rule 23 (exp -> exp GT exp .) ]
+  ! MINUS           [ reduce using rule 23 (exp -> exp GT exp .) ]
+  ! TIMES           [ reduce using rule 23 (exp -> exp GT exp .) ]
+  ! DIVIDE          [ reduce using rule 23 (exp -> exp GT exp .) ]
+  ! INTEGER_DIVIDE  [ reduce using rule 23 (exp -> exp GT exp .) ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
+
+
+state 56
+
+    (24) exp -> exp LTE exp .
+    (17) exp -> exp . PLUS exp
+    (18) exp -> exp . MINUS exp
+    (19) exp -> exp . TIMES exp
+    (20) exp -> exp . DIVIDE exp
+    (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
+
+    ,               reduce using rule 24 (exp -> exp LTE exp .)
+    LT              reduce using rule 24 (exp -> exp LTE exp .)
+    GT              reduce using rule 24 (exp -> exp LTE exp .)
+    LTE             reduce using rule 24 (exp -> exp LTE exp .)
+    GTE             reduce using rule 24 (exp -> exp LTE exp .)
+    EQUALS          reduce using rule 24 (exp -> exp LTE exp .)
+    NE              reduce using rule 24 (exp -> exp LTE exp .)
+    AND             reduce using rule 24 (exp -> exp LTE exp .)
+    OR              reduce using rule 24 (exp -> exp LTE exp .)
+    ;               reduce using rule 24 (exp -> exp LTE exp .)
+    DO              reduce using rule 24 (exp -> exp LTE exp .)
+    RETURN          reduce using rule 24 (exp -> exp LTE exp .)
+    IDENTIFIER      reduce using rule 24 (exp -> exp LTE exp .)
+    $end            reduce using rule 24 (exp -> exp LTE exp .)
+    END             reduce using rule 24 (exp -> exp LTE exp .)
+    )               reduce using rule 24 (exp -> exp LTE exp .)
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+
+  ! PLUS            [ reduce using rule 24 (exp -> exp LTE exp .) ]
+  ! MINUS           [ reduce using rule 24 (exp -> exp LTE exp .) ]
+  ! TIMES           [ reduce using rule 24 (exp -> exp LTE exp .) ]
+  ! DIVIDE          [ reduce using rule 24 (exp -> exp LTE exp .) ]
+  ! INTEGER_DIVIDE  [ reduce using rule 24 (exp -> exp LTE exp .) ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
+
+
+state 57
+
+    (25) exp -> exp GTE exp .
+    (17) exp -> exp . PLUS exp
+    (18) exp -> exp . MINUS exp
+    (19) exp -> exp . TIMES exp
+    (20) exp -> exp . DIVIDE exp
+    (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
+
+    ,               reduce using rule 25 (exp -> exp GTE exp .)
+    LT              reduce using rule 25 (exp -> exp GTE exp .)
+    GT              reduce using rule 25 (exp -> exp GTE exp .)
+    LTE             reduce using rule 25 (exp -> exp GTE exp .)
+    GTE             reduce using rule 25 (exp -> exp GTE exp .)
+    EQUALS          reduce using rule 25 (exp -> exp GTE exp .)
+    NE              reduce using rule 25 (exp -> exp GTE exp .)
+    AND             reduce using rule 25 (exp -> exp GTE exp .)
+    OR              reduce using rule 25 (exp -> exp GTE exp .)
+    ;               reduce using rule 25 (exp -> exp GTE exp .)
+    DO              reduce using rule 25 (exp -> exp GTE exp .)
+    RETURN          reduce using rule 25 (exp -> exp GTE exp .)
+    IDENTIFIER      reduce using rule 25 (exp -> exp GTE exp .)
+    $end            reduce using rule 25 (exp -> exp GTE exp .)
+    END             reduce using rule 25 (exp -> exp GTE exp .)
+    )               reduce using rule 25 (exp -> exp GTE exp .)
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+
+  ! PLUS            [ reduce using rule 25 (exp -> exp GTE exp .) ]
+  ! MINUS           [ reduce using rule 25 (exp -> exp GTE exp .) ]
+  ! TIMES           [ reduce using rule 25 (exp -> exp GTE exp .) ]
+  ! DIVIDE          [ reduce using rule 25 (exp -> exp GTE exp .) ]
+  ! INTEGER_DIVIDE  [ reduce using rule 25 (exp -> exp GTE exp .) ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
+
+
+state 58
+
+    (26) exp -> exp EQUALS exp .
+    (17) exp -> exp . PLUS exp
+    (18) exp -> exp . MINUS exp
+    (19) exp -> exp . TIMES exp
+    (20) exp -> exp . DIVIDE exp
+    (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
+
+    ,               reduce using rule 26 (exp -> exp EQUALS exp .)
+    LT              reduce using rule 26 (exp -> exp EQUALS exp .)
+    GT              reduce using rule 26 (exp -> exp EQUALS exp .)
+    LTE             reduce using rule 26 (exp -> exp EQUALS exp .)
+    GTE             reduce using rule 26 (exp -> exp EQUALS exp .)
+    EQUALS          reduce using rule 26 (exp -> exp EQUALS exp .)
+    NE              reduce using rule 26 (exp -> exp EQUALS exp .)
+    AND             reduce using rule 26 (exp -> exp EQUALS exp .)
+    OR              reduce using rule 26 (exp -> exp EQUALS exp .)
+    ;               reduce using rule 26 (exp -> exp EQUALS exp .)
+    DO              reduce using rule 26 (exp -> exp EQUALS exp .)
+    RETURN          reduce using rule 26 (exp -> exp EQUALS exp .)
+    IDENTIFIER      reduce using rule 26 (exp -> exp EQUALS exp .)
+    $end            reduce using rule 26 (exp -> exp EQUALS exp .)
+    END             reduce using rule 26 (exp -> exp EQUALS exp .)
+    )               reduce using rule 26 (exp -> exp EQUALS exp .)
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+
+  ! PLUS            [ reduce using rule 26 (exp -> exp EQUALS exp .) ]
+  ! MINUS           [ reduce using rule 26 (exp -> exp EQUALS exp .) ]
+  ! TIMES           [ reduce using rule 26 (exp -> exp EQUALS exp .) ]
+  ! DIVIDE          [ reduce using rule 26 (exp -> exp EQUALS exp .) ]
+  ! INTEGER_DIVIDE  [ reduce using rule 26 (exp -> exp EQUALS exp .) ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
+
+
+state 59
+
+    (27) exp -> exp NE exp .
+    (17) exp -> exp . PLUS exp
+    (18) exp -> exp . MINUS exp
+    (19) exp -> exp . TIMES exp
+    (20) exp -> exp . DIVIDE exp
+    (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
+
+    ,               reduce using rule 27 (exp -> exp NE exp .)
+    LT              reduce using rule 27 (exp -> exp NE exp .)
+    GT              reduce using rule 27 (exp -> exp NE exp .)
+    LTE             reduce using rule 27 (exp -> exp NE exp .)
+    GTE             reduce using rule 27 (exp -> exp NE exp .)
+    EQUALS          reduce using rule 27 (exp -> exp NE exp .)
+    NE              reduce using rule 27 (exp -> exp NE exp .)
+    AND             reduce using rule 27 (exp -> exp NE exp .)
+    OR              reduce using rule 27 (exp -> exp NE exp .)
+    ;               reduce using rule 27 (exp -> exp NE exp .)
+    DO              reduce using rule 27 (exp -> exp NE exp .)
+    RETURN          reduce using rule 27 (exp -> exp NE exp .)
+    IDENTIFIER      reduce using rule 27 (exp -> exp NE exp .)
+    $end            reduce using rule 27 (exp -> exp NE exp .)
+    END             reduce using rule 27 (exp -> exp NE exp .)
+    )               reduce using rule 27 (exp -> exp NE exp .)
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+
+  ! PLUS            [ reduce using rule 27 (exp -> exp NE exp .) ]
+  ! MINUS           [ reduce using rule 27 (exp -> exp NE exp .) ]
+  ! TIMES           [ reduce using rule 27 (exp -> exp NE exp .) ]
+  ! DIVIDE          [ reduce using rule 27 (exp -> exp NE exp .) ]
+  ! INTEGER_DIVIDE  [ reduce using rule 27 (exp -> exp NE exp .) ]
+  ! LT              [ shift and go to state 36 ]
+  ! GT              [ shift and go to state 37 ]
+  ! LTE             [ shift and go to state 38 ]
+  ! GTE             [ shift and go to state 39 ]
+  ! EQUALS          [ shift and go to state 40 ]
+  ! NE              [ shift and go to state 41 ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
+
+
+state 60
+
+    (28) exp -> exp AND exp .
+    (17) exp -> exp . PLUS exp
+    (18) exp -> exp . MINUS exp
+    (19) exp -> exp . TIMES exp
+    (20) exp -> exp . DIVIDE exp
+    (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
+
+    ,               reduce using rule 28 (exp -> exp AND exp .)
+    AND             reduce using rule 28 (exp -> exp AND exp .)
+    OR              reduce using rule 28 (exp -> exp AND exp .)
+    ;               reduce using rule 28 (exp -> exp AND exp .)
+    DO              reduce using rule 28 (exp -> exp AND exp .)
+    RETURN          reduce using rule 28 (exp -> exp AND exp .)
+    IDENTIFIER      reduce using rule 28 (exp -> exp AND exp .)
+    $end            reduce using rule 28 (exp -> exp AND exp .)
+    END             reduce using rule 28 (exp -> exp AND exp .)
+    )               reduce using rule 28 (exp -> exp AND exp .)
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+    LT              shift and go to state 36
+    GT              shift and go to state 37
+    LTE             shift and go to state 38
+    GTE             shift and go to state 39
+    EQUALS          shift and go to state 40
+    NE              shift and go to state 41
+
+  ! PLUS            [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! MINUS           [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! TIMES           [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! DIVIDE          [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! INTEGER_DIVIDE  [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! LT              [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! GT              [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! LTE             [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! GTE             [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! EQUALS          [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! NE              [ reduce using rule 28 (exp -> exp AND exp .) ]
+  ! AND             [ shift and go to state 42 ]
+  ! OR              [ shift and go to state 43 ]
+
+
+state 61
+
+    (29) exp -> exp OR exp .
+    (17) exp -> exp . PLUS exp
+    (18) exp -> exp . MINUS exp
+    (19) exp -> exp . TIMES exp
+    (20) exp -> exp . DIVIDE exp
+    (21) exp -> exp . INTEGER_DIVIDE exp
+    (22) exp -> exp . LT exp
+    (23) exp -> exp . GT exp
+    (24) exp -> exp . LTE exp
+    (25) exp -> exp . GTE exp
+    (26) exp -> exp . EQUALS exp
+    (27) exp -> exp . NE exp
+    (28) exp -> exp . AND exp
+    (29) exp -> exp . OR exp
+
+    ,               reduce using rule 29 (exp -> exp OR exp .)
+    OR              reduce using rule 29 (exp -> exp OR exp .)
+    ;               reduce using rule 29 (exp -> exp OR exp .)
+    DO              reduce using rule 29 (exp -> exp OR exp .)
+    RETURN          reduce using rule 29 (exp -> exp OR exp .)
+    IDENTIFIER      reduce using rule 29 (exp -> exp OR exp .)
+    $end            reduce using rule 29 (exp -> exp OR exp .)
+    END             reduce using rule 29 (exp -> exp OR exp .)
+    )               reduce using rule 29 (exp -> exp OR exp .)
+    PLUS            shift and go to state 31
+    MINUS           shift and go to state 32
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 34
+    INTEGER_DIVIDE  shift and go to state 35
+    LT              shift and go to state 36
+    GT              shift and go to state 37
+    LTE             shift and go to state 38
+    GTE             shift and go to state 39
+    EQUALS          shift and go to state 40
+    NE              shift and go to state 41
+    AND             shift and go to state 42
+
+  ! PLUS            [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! MINUS           [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! TIMES           [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! DIVIDE          [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! INTEGER_DIVIDE  [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! LT              [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! GT              [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! LTE             [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! GTE             [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! EQUALS          [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! NE              [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! AND             [ reduce using rule 29 (exp -> exp OR exp .) ]
+  ! OR              [ shift and go to state 43 ]
+
+
+state 62
+
+    (30) exp -> ( exp ) .
+
+    ,               reduce using rule 30 (exp -> ( exp ) .)
+    PLUS            reduce using rule 30 (exp -> ( exp ) .)
+    MINUS           reduce using rule 30 (exp -> ( exp ) .)
+    TIMES           reduce using rule 30 (exp -> ( exp ) .)
+    DIVIDE          reduce using rule 30 (exp -> ( exp ) .)
+    INTEGER_DIVIDE  reduce using rule 30 (exp -> ( exp ) .)
+    LT              reduce using rule 30 (exp -> ( exp ) .)
+    GT              reduce using rule 30 (exp -> ( exp ) .)
+    LTE             reduce using rule 30 (exp -> ( exp ) .)
+    GTE             reduce using rule 30 (exp -> ( exp ) .)
+    EQUALS          reduce using rule 30 (exp -> ( exp ) .)
+    NE              reduce using rule 30 (exp -> ( exp ) .)
+    AND             reduce using rule 30 (exp -> ( exp ) .)
+    OR              reduce using rule 30 (exp -> ( exp ) .)
+    ;               reduce using rule 30 (exp -> ( exp ) .)
+    DO              reduce using rule 30 (exp -> ( exp ) .)
+    RETURN          reduce using rule 30 (exp -> ( exp ) .)
+    IDENTIFIER      reduce using rule 30 (exp -> ( exp ) .)
+    $end            reduce using rule 30 (exp -> ( exp ) .)
+    END             reduce using rule 30 (exp -> ( exp ) .)
+    )               reduce using rule 30 (exp -> ( exp ) .)
 
 WARNING: 
 WARNING: Conflicts:

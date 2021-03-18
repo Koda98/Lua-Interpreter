@@ -1,2 +1,3 @@
-a, b, c = 1+1, 2+2, 3+3
-print(a, b, c)
+a = 1 < 3
+b = not (4 == 1)
+print(a, b)

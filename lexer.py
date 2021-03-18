@@ -5,9 +5,16 @@
 import ply.lex as lex
 
 keywords = {
+    "nil": "NIL",
     "return": "RETURN",
     "do": "DO",
     "end": "END",
+    "false": "FALSE",
+    "true": "TRUE",
+    "and": "AND",
+    "or": "OR",
+    "not": "NOT",
+    # "while": "WHILE",
 }
 
 
@@ -19,11 +26,29 @@ tokens = [
     'TIMES',
     'DIVIDE',
     'INTEGER_DIVIDE',
+    'LT',
+    'GT',
+    'LTE',
+    'GTE',
+    'NE',
+    'EQUALS',
 ]
 
 literals = ["(", ")", '=', ';', ',']
 
 tokens += keywords.values()
+
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_TIMES = r'\*'
+t_DIVIDE = r'\/'
+t_INTEGER_DIVIDE = r'\/\/'
+t_LT = r'<'
+t_GT = r'>'
+t_LTE = r'<='
+t_GTE = r'>='
+t_NE = r'~='
+t_EQUALS = r'=='
 
 t_ignore = " \t"
 
@@ -52,13 +77,6 @@ def t_newline(t):
     # t.lexer.lineno += len(t.value)
 
 
-t_PLUS = r'\+'
-t_MINUS = r'-'
-t_TIMES = r'\*'
-t_DIVIDE = r'\/'
-t_INTEGER_DIVIDE = r'\/\/'
-
-
 def t_error(t):
     print(f"Illegal character {t.value[0]}")
     t.lexer.skip(1)
@@ -70,7 +88,8 @@ if __name__ == "__main__":
     # Test it out
     data = '''
     do
-    a = 1 // 3
+    a = 3 < 4
+    b = not 4 == 1
     end
     '''
 

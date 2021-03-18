@@ -46,6 +46,23 @@ class AssignStat(AST):
         return f"AssignStat({self.varlist} = {self.explist})"
 
 
+class BreakStat(AST):
+    def __init__(self):
+        self.value = "break"
+
+    def __str__(self):
+        return "break"
+
+
+class WhileStat(AST):
+    def __init__(self, exp, block):
+        self.exp = exp
+        self.block = block
+
+    def __str__(self):
+        return f"WhileStat({self.exp} do {self.block} end)"
+
+
 class RetStat(AST):
     def __init__(self, exp=None):
         self.exp = exp

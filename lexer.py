@@ -14,7 +14,8 @@ keywords = {
     "and": "AND",
     "or": "OR",
     "not": "NOT",
-    # "while": "WHILE",
+    "while": "WHILE",
+    "break": "BREAK",
 }
 
 
@@ -87,9 +88,11 @@ lexer = lex.lex(debug=False)
 if __name__ == "__main__":
     # Test it out
     data = '''
-    do
-    a = 3 < 4
-    b = not 4 == 1
+    a = 1
+    b = 1
+    while a < 3 do
+        a = a + 1
+        b = b + 3
     end
     '''
 

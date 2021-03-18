@@ -40,9 +40,19 @@ def p_stat_semi(p):
     p[0] = Empty()
 
 
+def p_stat_break(p):
+    """stat : BREAK"""
+    p[0] = BreakStat()
+
+
 def p_stat_do(p):
     """stat : DO block END"""
     p[0] = Block(p[2])
+
+
+def p_stat_while(p):
+    """stat : WHILE exp DO block END"""
+    p[0] = WhileStat(p[2], p[4])
 
 
 def p_stat_assign(p):
@@ -162,9 +172,12 @@ def parse(data, debug=0):
 if __name__ == "__main__":
     # Test it out
     data = '''
-    do
-    a = 1 < 3
-    b = not 4 == 1
+    a = 1
+    b = 1
+    while a < 3 do
+        a = a + 1
+        b = b + 3
+        break
     end
     '''
 

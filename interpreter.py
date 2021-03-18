@@ -37,6 +37,18 @@ class Interpreter(NodeVisitor):
             exp = self.visit(exp)
             self.state[name] = exp
 
+    def visit_BreakStat(self, node):
+        raise BreakException
+
+    def visit_WhileStat(self, node):
+        cond = self.visit(node.exp)
+        while cond:
+            try:
+                self.visit(node.block)
+            except BreakException:
+                break
+            cond = self.visit(node.exp)
+
     def visit_RetStat(self, node):
         return self.visit(node.exp)
 
@@ -117,14 +129,25 @@ class Interpreter(NodeVisitor):
         return self.visit(self.ast)
 
 
+class BreakException(Exception):
+    def __init__(self):
+        self.value = "break"
+
+    def __str__(self):
+        return "break"
+
+
 def main(inter_debug=False, parse_debug=False):
     # while True:
     # s = input()
 
     s = """
-    do
-    a = 1 < 2
-    c = not (4 == 1)
+    a = 1
+    b = 1
+    while a < 3 do
+        a = a + 1
+        b = b + 3
+        break
     end
     """
 

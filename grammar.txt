@@ -1,4 +1,4 @@
-Current grammar
+Grammar
 
 chunk ::= block
 

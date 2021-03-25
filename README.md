@@ -1,6 +1,5 @@
 # Lua Interpreter
-Project for CSE 210A 
 
 Built in Python using the PLY library.
 
-help.
+Usage: `python lua.py [-dt] [<script]`

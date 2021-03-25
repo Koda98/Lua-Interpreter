@@ -1,7 +1,7 @@
 """Usage:
     lua.py
     lua.py [-t]
-    lua.py [-d] [<script>]
+    lua.py [-dt] [<script>]
 
 Arguments:
     <script>  Lua script to be run
@@ -75,4 +75,4 @@ if __name__ == "__main__":
             except RuntimeError:
                 pass
 
-    main()
+    # main()

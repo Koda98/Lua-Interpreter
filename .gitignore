@@ -2,3 +2,4 @@ documents
 .idea
 __pycache__
 /argTest.py
+.DS_Store
